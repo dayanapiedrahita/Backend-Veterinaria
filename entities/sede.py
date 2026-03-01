@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 from database import Base
 
 class Sede(Base):
@@ -8,3 +9,5 @@ class Sede(Base):
     nombre = Column(String, nullable=False)
     direccion = Column(String, nullable=False)
     telefono = Column(String, nullable=False)
+
+    veterinarios = relationship("Veterinario", back_populates="sede")
