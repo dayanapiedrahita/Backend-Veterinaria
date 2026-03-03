@@ -1,18 +1,29 @@
-from .usuario_schema import UsuarioCreate, UsuarioResponse
-from .cliente_schema import ClienteCreate, ClienteResponse
-from .veterinario_schema import VeterinarioCreate, VeterinarioResponse
-from .sede_schema import SedeCreate, SedeResponse
-from .mascota_schema import MascotaCreate, MascotaResponse
-from .vacuna_schema import VacunaCreate, VacunaResponse
-from .cita_vacunacion_schema import CitaVacunacionCreate, CitaVacunacionResponse
-
+from .usuario_schema import (
+    UsuarioResponse,
+    UsuarioCreate,
+    UsuarioUpdate,
+    ClienteRegistro,
+    VeterinarioRegistro,
+    LoginSchema
+)
+from .cliente_schema import ClienteResponse, ClienteUpdate
+from .veterinario_schema import VeterinarioResponse, VeterinarioUpdate
+from .sede_schema import SedeCreate, SedeResponse, SedeUpdate
+from .mascota_schema import MascotaCreate, MascotaResponse, MascotaUpdate
+from .vacuna_schema import VacunaCreate, VacunaResponse, VacunaUpdate
+from .cita_vacunacion_schema import (
+    CitaVacunacionCreate,
+    CitaVacunacionResponse,
+    CitaVacunacionUpdate
+)
 
 __all__ = [
-    "SedeSchema", "SedeCreate", "SedeUpdate",
-    "UsuarioSchema", "UsuarioCreate", "UsuarioUpdate",
-    "ClienteSchema", "ClienteCreate", "ClienteUpdate",
-    "VeterinarioSchema", "VeterinarioCreate", "VeterinarioUpdate",
-    "MascotaSchema", "MascotaCreate", "MascotaUpdate",
-    "VacunaSchema", "VacunaCreate", "VacunaUpdate",
-    "CitaVacunacionSchema", "CitaVacunacionCreate", "CitaVacunacionUpdate"
+    "UsuarioResponse", "UsuarioCreate", "UsuarioUpdate",
+    "ClienteRegistro", "VeterinarioRegistro", "LoginSchema",
+    "ClienteResponse", "ClienteUpdate",
+    "VeterinarioResponse", "VeterinarioUpdate",
+    "SedeCreate", "SedeResponse", "SedeUpdate",
+    "MascotaCreate", "MascotaResponse", "MascotaUpdate",
+    "VacunaCreate", "VacunaResponse", "VacunaUpdate",
+    "CitaVacunacionCreate", "CitaVacunacionResponse", "CitaVacunacionUpdate",
 ]

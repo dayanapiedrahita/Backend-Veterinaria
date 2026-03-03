@@ -1,15 +1,19 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class ClienteBase(BaseModel):
+    nombre: str
+    telefono: str
     direccion: str
 
-
-class ClienteCreate(ClienteBase):
-    id: int  # referencia al usuario
-
+class ClienteUpdate(BaseModel):
+    nombre: Optional[str]
+    telefono: Optional[str]
+    direccion: Optional[str]
 
 class ClienteResponse(ClienteBase):
     id: int
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True
+    }

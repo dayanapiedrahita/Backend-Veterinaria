@@ -1,19 +1,36 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
+from typing import Optional
 
 class UsuarioBase(BaseModel):
-    nombre: str
-    apellido: str
-    documento: str
-    telefono: str
-    email: EmailStr
-
+    email: str
+    rol: str
 
 class UsuarioCreate(UsuarioBase):
     pass
 
+class UsuarioUpdate(BaseModel):
+    email: Optional[str]
+    rol: Optional[str]
 
 class UsuarioResponse(UsuarioBase):
     id: int
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True
+    }
+
+class ClienteRegistro(BaseModel):
+    nombre: str
+    telefono: str
+    direccion: str
+    email: str
+
+class VeterinarioRegistro(BaseModel):
+    nombre: str
+    telefono: str
+    especialidad: str
+    id_sede: int
+    email: str
+
+class LoginSchema(BaseModel):
+    email: str

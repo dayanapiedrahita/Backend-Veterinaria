@@ -1,17 +1,21 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class VeterinarioBase(BaseModel):
-    tarjeta_profesional: str
+    nombre: str
+    telefono: str
     especialidad: str
     id_sede: int
 
-
-class VeterinarioCreate(VeterinarioBase):
-    id: int  # referencia al usuario
-
+class VeterinarioUpdate(BaseModel):
+    nombre: Optional[str]
+    telefono: Optional[str]
+    especialidad: Optional[str]
+    id_sede: Optional[int]
 
 class VeterinarioResponse(VeterinarioBase):
     id: int
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        "from_attributes": True
+    }
