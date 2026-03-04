@@ -14,6 +14,8 @@ class Usuario(Base):
     cliente_id = Column(Integer, ForeignKey("cliente.id"), nullable=True)
     veterinario_id = Column(Integer, ForeignKey("veterinario.id"), nullable=True)
 
+    cliente = relationship("Cliente", back_populates="usuario", uselist=False)
+    veterinario = relationship("Veterinario", back_populates="usuario", uselist=False)
 
 
-    
+

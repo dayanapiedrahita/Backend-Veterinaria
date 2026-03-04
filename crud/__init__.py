@@ -45,5 +45,5 @@ __all__ = [
     "get_sedes", "get_sede", "create_sede", "update_sede", "delete_sede",
     "get_mascotas", "get_mascota", "create_mascota", "update_mascota", "delete_mascota",
     "get_vacunas", "get_vacuna", "create_vacuna", "update_vacuna", "delete_vacuna",
-    "get_citas", "get_cita", "create_cita", "update_cita", "delete_cita",
+    "get_citas_vacunacion", "get_cita_vacunacion", "create_cita_vacunacion", "update_cita_vacunacion", "delete_cita_vacunacion",
 ]
