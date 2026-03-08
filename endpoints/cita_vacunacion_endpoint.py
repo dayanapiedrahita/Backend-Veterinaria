@@ -11,7 +11,11 @@ from crud.cita_vacunacion_crud import (
 )
 from entities.cita_vacunacion import CitaVacunacion
 
+<<<<<<< HEAD
 router = APIRouter(prefix="/citas_vacunacion", tags=["CitasVacunacion"])
+=======
+router = APIRouter(prefix="/cita_vacunacion", tags=["CitaVacunacion"])
+>>>>>>> 5bd09800c98fc85e16530f65b638b366716b6ff5
 
 @router.get("/", response_model=list[CitaVacunacionResponse])
 def listar_citas(db: Session = Depends(get_db)):
