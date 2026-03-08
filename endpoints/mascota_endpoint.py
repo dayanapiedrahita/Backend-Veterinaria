@@ -5,7 +5,7 @@ from schemas.mascota_schema import MascotaCreate, MascotaUpdate, MascotaResponse
 from crud.mascota_crud import get_mascotas, get_mascota, create_mascota, update_mascota, delete_mascota
 from entities.mascota import Mascota
 
-router = APIRouter(prefix="/mascota", tags=["Mascota"])
+router = APIRouter(prefix="/mascotas", tags=["Mascotas"])
 
 @router.get("/", response_model=list[MascotaResponse])
 def listar_mascotas(db: Session = Depends(get_db)):

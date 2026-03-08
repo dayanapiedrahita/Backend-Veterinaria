@@ -5,7 +5,7 @@ from database import get_db
 from schemas.veterinario_schema import VeterinarioUpdate, VeterinarioResponse
 from crud.veterinario_crud import get_veterinarios, get_veterinario, update_veterinario, delete_veterinario
 
-router = APIRouter(prefix="/veterinario", tags=["Veterinario"])
+router = APIRouter(prefix="/veterinarios", tags=["Veterinarios"])
 
 
 @router.get("/", response_model=list[VeterinarioResponse])

@@ -27,10 +27,19 @@ class ClienteRegistro(BaseModel):
 
 class VeterinarioRegistro(BaseModel):
     nombre: str
-    telefono: str
     especialidad: str
     id_sede: int
     email: str
 
 class LoginSchema(BaseModel):
     email: str
+    # password omitted for now; could be added later if credential checking is required
+
+
+class LoginResponse(BaseModel):
+    token: str
+    usuario: UsuarioResponse
+
+    model_config = {
+        "from_attributes": True
+    }

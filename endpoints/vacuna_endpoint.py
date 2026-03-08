@@ -5,7 +5,7 @@ from schemas.vacuna_schema import VacunaCreate, VacunaUpdate, VacunaResponse
 from crud.vacuna_crud import get_vacunas, get_vacuna, create_vacuna, update_vacuna, delete_vacuna
 from entities.vacuna import Vacuna
 
-router = APIRouter(prefix="/vacuna", tags=["Vacuna"])
+router = APIRouter(prefix="/vacunas", tags=["Vacunas"])
 
 @router.get("/", response_model=list[VacunaResponse])
 def listar_vacunas(db: Session = Depends(get_db)):

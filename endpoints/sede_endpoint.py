@@ -5,7 +5,7 @@ from schemas.sede_schema import SedeCreate, SedeUpdate, SedeResponse
 from crud.sede_crud import get_sedes, get_sede, create_sede, update_sede, delete_sede
 from entities.sede import Sede
 
-router = APIRouter(prefix="/sede", tags=["Sede"])
+router = APIRouter(prefix="/sedes", tags=["Sedes"])
 
 @router.get("/", response_model=list[SedeResponse])
 def listar_sedes(db: Session = Depends(get_db)):

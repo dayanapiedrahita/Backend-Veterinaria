@@ -10,6 +10,12 @@ def get_usuarios(db: Session):
 def get_usuario_by_id(db: Session, user_id: int):
     return db.query(Usuario).filter(Usuario.id == user_id).first()
 
+def get_usuario_by_email(db: Session, email: str):
+    return db.query(Usuario).filter(Usuario.email == email).first()
+
+def contar_usuarios(db: Session) -> int:
+    """Retorna el número total de usuarios"""
+    return db.query(Usuario).count()
 def create_usuario(db: Session, email: str, rol: str, cliente_id: int | None = None, veterinario_id: int | None = None):
     usuario = Usuario(
         email=email,
@@ -72,9 +78,8 @@ def register_veterinario(db: Session, data: VeterinarioRegistro):
         raise ValueError("El email ya está registrado")
     veterinario = Veterinario(
         nombre=data.nombre,
-        telefono=data.telefono,
         especialidad=data.especialidad,
-        id_sede=data.id_sede
+        sede_id=data.id_sede
     )
     db.add(veterinario)
     db.flush()
