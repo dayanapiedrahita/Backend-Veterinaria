@@ -5,11 +5,7 @@ from database import get_db
 from schemas.cliente_schema import ClienteUpdate, ClienteResponse
 from crud.cliente_crud import get_clientes, get_cliente, update_cliente, delete_cliente
 
-<<<<<<< HEAD
 router = APIRouter(prefix="/clientes", tags=["Clientes"])
-=======
-router = APIRouter(prefix="/cliente", tags=["Cliente"])
->>>>>>> 5bd09800c98fc85e16530f65b638b366716b6ff5
 
 
 @router.get("/", response_model=list[ClienteResponse])
