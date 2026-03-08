@@ -15,6 +15,14 @@ app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
+# Ruta principal
+@app.get("/")
+def root():
+    return {
+        "mensaje": "API Veterinaria funcionando",
+        "documentacion": "/docs"
+    }
+
 app.include_router(sede_endpoint.router)
 app.include_router(usuario_endpoint.router)
 app.include_router(cliente_endpoint.router)
