@@ -32,7 +32,6 @@ class VeterinarioRegistro(BaseModel):
     email: str
 
 class LoginSchema(BaseModel):
-<<<<<<< HEAD
     email: str
     # password omitted for now; could be added later if credential checking is required
 
@@ -44,6 +43,3 @@ class LoginResponse(BaseModel):
     model_config = {
         "from_attributes": True
     }
-=======
-    email: str
->>>>>>> 5bd09800c98fc85e16530f65b638b366716b6ff5

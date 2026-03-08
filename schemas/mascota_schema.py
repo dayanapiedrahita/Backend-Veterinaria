@@ -22,11 +22,6 @@ class MascotaUpdate(BaseModel):
 class MascotaResponse(MascotaBase):
     id: int
 
-<<<<<<< HEAD
     model_config = {
         "from_attributes": True
     }
-=======
-    class Config:
-        orm_mode = True
->>>>>>> 5bd09800c98fc85e16530f65b638b366716b6ff5
