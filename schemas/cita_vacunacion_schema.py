@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import date, time
+from typing import Optional
 
 
 class CitaVacunacionBase(BaseModel):
@@ -17,17 +18,18 @@ class CitaVacunacionCreate(CitaVacunacionBase):
 
 
 class CitaVacunacionUpdate(BaseModel):
-    fecha: date | None = None
-    hora: time | None = None
-    estado: str | None = None
-    aplicada: bool | None = None
-    id_mascota: int | None = None
-    id_veterinario: int | None = None
-    id_vacuna: int | None = None
+    fecha: Optional[date] = None
+    hora: Optional[time] = None
+    estado: Optional[str] = None
+    aplicada: Optional[bool] = None
+    id_mascota: Optional[int] = None
+    id_veterinario: Optional[int] = None
+    id_vacuna: Optional[int] = None
 
 
 class CitaVacunacionResponse(CitaVacunacionBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = {
+        "from_attributes": True
+    }

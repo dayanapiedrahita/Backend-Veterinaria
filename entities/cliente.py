@@ -8,6 +8,7 @@ class Cliente(Base):
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String, nullable=False)
     telefono = Column(String)
+    direccion = Column(String)
     email = Column(String, unique=True)
 
     mascotas = relationship("Mascota", back_populates="cliente")
