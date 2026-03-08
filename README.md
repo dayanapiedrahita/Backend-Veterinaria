@@ -132,9 +132,10 @@ http://127.0.0.1:8000/docs
 
 ---
 
-## Autor
+## Autores
 
 Juan Felipe Ospina Agudelo
+
 Lincon Andres Palacios
 
 ---
