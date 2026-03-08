@@ -15,7 +15,6 @@ app = FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
-# Ruta principal
 @app.get("/")
 def root():
     return {
