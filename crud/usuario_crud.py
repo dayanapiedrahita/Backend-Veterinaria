@@ -72,9 +72,8 @@ def register_veterinario(db: Session, data: VeterinarioRegistro):
         raise ValueError("El email ya está registrado")
     veterinario = Veterinario(
         nombre=data.nombre,
-        telefono=data.telefono,
         especialidad=data.especialidad,
-        id_sede=data.id_sede
+        sede_id=data.id_sede
     )
     db.add(veterinario)
     db.flush()

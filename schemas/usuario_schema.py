@@ -27,7 +27,6 @@ class ClienteRegistro(BaseModel):
 
 class VeterinarioRegistro(BaseModel):
     nombre: str
-    telefono: str
     especialidad: str
     id_sede: int
     email: str
