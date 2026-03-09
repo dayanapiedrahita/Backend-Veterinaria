@@ -6,7 +6,7 @@ from endpoints import (
     veterinario_endpoint,
     mascota_endpoint,
     vacuna_endpoint,
-    cita_vacunacion_endpoint
+    cita_vacunacion_endpoint,
 )
 from database import Base, engine
 from entities import *
@@ -41,7 +41,6 @@ from endpoints import (
 from database import Base, engine, create_tables
 from entities import *
 
-
 app = FastAPI(
     title="Sistema de Gestión de Veterinaria",
     description="API REST para la veterinaria (adaptada del proyecto de ejemplo)",
@@ -59,12 +58,12 @@ app.add_middleware(
 )
 
 
-
 def _init_db():
     """Initialize database tables on startup"""
     print("Creando/actualizando tablas de la base de datos...")
     create_tables()
     print("API lista - documentación disponible en http://localhost:8000/docs")
+
 
 _init_db()
 
@@ -109,7 +108,5 @@ def main():
     )
 
 
-
 if __name__ == "__main__":
     main()
-    

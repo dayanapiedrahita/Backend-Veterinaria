@@ -26,6 +26,4 @@ class CitaVacunacionUpdate(BaseModel):
 class CitaVacunacionResponse(CitaVacunacionBase):
     id: int
 
-    model_config = {
-        "from_attributes": True
-    }
+    model_config = {"from_attributes": True}
