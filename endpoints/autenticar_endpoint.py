@@ -14,8 +14,7 @@ def login(credentials: LoginSchema, db: Session = Depends(get_db)):
     usuario = login_usuario(db, credentials.email)
     if not usuario:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Credenciales inválidas"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas"
         )
 
     # en un sistema real generar JWT u otro token

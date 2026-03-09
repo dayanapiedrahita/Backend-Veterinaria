@@ -3,7 +3,12 @@ from sqlalchemy.orm import Session
 from database import get_db
 
 from schemas.veterinario_schema import VeterinarioUpdate, VeterinarioResponse
-from crud.veterinario_crud import get_veterinarios, get_veterinario, update_veterinario, delete_veterinario
+from crud.veterinario_crud import (
+    get_veterinarios,
+    get_veterinario,
+    update_veterinario,
+    delete_veterinario,
+)
 
 router = APIRouter(prefix="/veterinarios", tags=["Veterinarios"])
 
@@ -25,14 +30,12 @@ def obtener_veterinario(veterinario_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{veterinario_id}", response_model=VeterinarioResponse)
-def actualizar_veterinario(veterinario_id: int, data: VeterinarioUpdate, db: Session = Depends(get_db)):
+def actualizar_veterinario(
+    veterinario_id: int, data: VeterinarioUpdate, db: Session = Depends(get_db)
+):
 
     updated = update_veterinario(
-        db,
-        veterinario_id,
-        data.nombre,
-        data.especialidad,
-        data.sede_id
+        db, veterinario_id, data.nombre, data.especialidad, data.sede_id
     )
 
     if not updated:

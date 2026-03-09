@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from datetime import date
 from typing import Optional
 
+
 class MascotaBase(BaseModel):
     nombre: str
     especie: str
@@ -9,8 +10,10 @@ class MascotaBase(BaseModel):
     fecha_nacimiento: date
     id_cliente: int
 
+
 class MascotaCreate(MascotaBase):
     pass
+
 
 class MascotaUpdate(BaseModel):
     nombre: Optional[str]
@@ -19,9 +22,8 @@ class MascotaUpdate(BaseModel):
     fecha_nacimiento: Optional[date]
     id_cliente: Optional[int]
 
+
 class MascotaResponse(MascotaBase):
     id: int
 
-    model_config = {
-        "from_attributes": True
-    }
+    model_config = {"from_attributes": True}

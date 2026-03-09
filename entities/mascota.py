@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Date
 from sqlalchemy.orm import relationship
 from database import Base
 
+
 class Mascota(Base):
     __tablename__ = "mascota"
 
@@ -14,4 +15,6 @@ class Mascota(Base):
     cliente_id = Column(Integer, ForeignKey("cliente.id"), nullable=False)
 
     cliente = relationship("Cliente", back_populates="mascotas")
-    citas = relationship("CitaVacunacion", back_populates="mascota", cascade="all, delete")
+    citas = relationship(
+        "CitaVacunacion", back_populates="mascota", cascade="all, delete"
+    )

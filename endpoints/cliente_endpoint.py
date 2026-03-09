@@ -25,7 +25,9 @@ def obtener_cliente(cliente_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{cliente_id}", response_model=ClienteResponse)
-def actualizar_cliente(cliente_id: int, data: ClienteUpdate, db: Session = Depends(get_db)):
+def actualizar_cliente(
+    cliente_id: int, data: ClienteUpdate, db: Session = Depends(get_db)
+):
 
     updated = update_cliente(db, cliente_id, data.nombre, data.telefono)
 
