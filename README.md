@@ -14,6 +14,9 @@ Instala las dependencias definidas en requirements.txt.
 Ejecuta linting con flake8 para asegurar que el código cumple con los estándares de estilo y calidad.
 Corre todos los tests unitarios e integrales con pytest para verificar que las funcionalidades principales del sistema no se rompan.
 Puede auditar dependencias con pip-audit para detectar vulnerabilidades antes de desplegar.
+
+En conjunto, estos pipelines permiten mantener la estabilidad del proyecto, detectar errores rápidamente y preparar el entorno para despliegues seguros y consistentes, minimizando riesgos al integrar nuevos cambios.
+
 ---
 
 ## Tecnologías utilizadas
