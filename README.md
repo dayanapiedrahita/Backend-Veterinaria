@@ -1,4 +1,4 @@
-# Sistema de Gestión de Vacunación Veterinaria 🐾💉
+# Sistema de Gestión de Vacunación Veterinaria 
 
 ## Descripción
 
@@ -8,6 +8,14 @@ La aplicación permite registrar mascotas, propietarios y llevar control del his
 
 El objetivo del sistema es facilitar el control del esquema de vacunación de cada mascota y mejorar la organización de la clínica.
 
+En cuanto a los pipelines, el proyecto está preparado para integrarse con flujos de integración continua y despliegue continuo (CI/CD). Gracias a la configuración de GitHub Actions (.github/workflows/ci.yml), cada cambio en el código dispara automáticamente un pipeline que:
+
+Instala las dependencias definidas en requirements.txt.
+Ejecuta linting con flake8 para asegurar que el código cumple con los estándares de estilo y calidad.
+Corre todos los tests unitarios e integrales con pytest para verificar que las funcionalidades principales del sistema no se rompan.
+Puede auditar dependencias con pip-audit para detectar vulnerabilidades antes de desplegar.
+
+En conjunto, estos pipelines permiten mantener la estabilidad del proyecto, detectar errores rápidamente y preparar el entorno para despliegues seguros y consistentes, minimizando riesgos al integrar nuevos cambios.
 ---
 
 ## Tecnologías utilizadas
@@ -26,23 +34,32 @@ El objetivo del sistema es facilitar el control del esquema de vacunación de ca
 ```bash
 project/
 │
-├── alembic/                # Configuración de migraciones de base de datos
-├── crud/                   # Funciones CRUD para interactuar con la base de datos
-├── endpoints/              # Rutas o endpoints de la API
-├── entities/               # Modelos de base de datos (tablas)
-├── migrations/             # Archivos generados por las migraciones
-├── schemas/                # Esquemas de validación con Pydantic
-│
-├── __init__.py             # Inicialización del paquete
-├── database.py             # Configuración de conexión a la base de datos
-├── main.py                 # Punto de entrada de la aplicación
-├── cli_menu.py             # Interfaz de línea de comandos para interacción con el sistema
-│
-├── alembic.ini             # Configuración de Alembic
-├── requirements.txt        # Dependencias del proyecto
-├── test_connection.py      # Script para probar la conexión a la base de datos
-├── .gitignore              # Archivos ignorados por Git
-└── README.md               # Documentación del proyecto
+Backend-Veterinaria/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── .venv/
+├── alembic/
+├── core/
+├── crud/
+├── endpoints/
+├── entities/
+├── migrations/
+├── schemas/
+├── scripts/
+├── tests/
+├── venv/
+├── __init__.py
+├── .env
+├── .gitignore
+├── alembic.ini
+├── cli_menu.py
+├── database.py
+├── Dockerfile
+├── main.py
+├── README.md
+├── requirements.txt
+└── test_connection.py
 ```
 
 ---
