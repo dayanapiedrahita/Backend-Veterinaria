@@ -6,11 +6,13 @@ SQLAlchemy==2.0.43
 typing_extensions==4.15.0
 python-dotenv==1.0.1
 fastapi==0.104.1
+starlette==0.32.0
 uvicorn[standard]==0.24.0
 pydantic==2.8.2
 python-multipart==0.0.6
+httpx==0.24.1
 black==26.1.0
 pip-audit==2.7.0
 pytest==7.4.4
+pytest-asyncio==0.23.2
 flake8==7.0.0
-httpx>=0.28.0

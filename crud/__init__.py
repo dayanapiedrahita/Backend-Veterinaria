@@ -9,6 +9,7 @@ from .usuario_crud import (
     create_usuario,
     update_usuario,
     delete_usuario,
+    contar_usuarios,
 )
 
 # CLIENTE
@@ -74,6 +75,7 @@ __all__ = [
     "create_usuario",
     "update_usuario",
     "delete_usuario",
+    "contar_usuarios",
 
     # CLIENTE
     "get_clientes",

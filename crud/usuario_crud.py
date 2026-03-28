@@ -32,7 +32,6 @@ def get_usuario_by_email(db: Session, email: str):
 
 
 def create_usuario(db: Session, email: str, rol: str, cliente_id: int | None = None, veterinario_id: int | None = None):
-    
     existing = db.query(Usuario).filter(Usuario.email == email).first()
     if existing:
         raise ConflictException("El email ya está registrado")
@@ -47,15 +46,16 @@ def create_usuario(db: Session, email: str, rol: str, cliente_id: int | None = N
 
     return usuario
 
+
+def update_usuario(db: Session, user_id: int, email: str | None = None, rol: str | None = None):
+    db_usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
     if not db_usuario:
         raise NotFoundException("Usuario no encontrado")
 
     if email:
-        
         existing = db.query(Usuario).filter(Usuario.email == email).first()
         if existing and existing.id != user_id:
             raise ConflictException("El email ya está en uso")
-
         db_usuario.email = email
 
     if rol:
@@ -65,6 +65,23 @@ def create_usuario(db: Session, email: str, rol: str, cliente_id: int | None = N
     db.refresh(db_usuario)
 
     return db_usuario
+
+
+def delete_usuario(db: Session, user_id: int):
+    db_usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
+    if not db_usuario:
+        raise NotFoundException("Usuario no encontrado")
+
+    db.delete(db_usuario)
+    db.commit()
+
+    return {"message": "Usuario eliminado correctamente"}
+
+
+def contar_usuarios(db: Session) -> int:
+    """Retorna el número total de usuarios"""
+    return db.query(Usuario).count()
+
 
 
 

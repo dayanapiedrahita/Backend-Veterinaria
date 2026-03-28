@@ -1,15 +1,15 @@
 # tests/conftest.py
 import pytest
+from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database import Base, get_db  # tu Base y función para obtener sesiones
+from database import Base, get_db
 from main import app
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"  # o la URL de test
+SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
 engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Crear las tablas de prueba
 Base.metadata.create_all(bind=engine)
 
 @pytest.fixture
@@ -20,6 +20,10 @@ def db():
     try:
         yield db
     finally:
-        db.rollback()
-        db.close()
+        transaction.rollback()
         connection.close()
+
+@pytest.fixture
+def client():
+    """Create TestClient for FastAPI app"""
+    return TestClient(app)

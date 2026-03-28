@@ -21,7 +21,7 @@ def get_mascota(db: Session, mascota_id: int):
 
 
 def create_mascota(db: Session, data: MascotaCreate):
-    payload = data.dict()
+    payload = data.model_dump()
 
     cliente_id = payload.get('id_cliente')
     if cliente_id is not None:
