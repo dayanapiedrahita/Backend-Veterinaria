@@ -1,45 +1,48 @@
 from dotenv import load_dotenv
 import os
 from logging.config import fileConfig
+
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 
+# 🔥 Cargar variables de entorno
 load_dotenv()
+
 config = context.config
 
-# Sobrescribir URL de Neon
+# 🔥 Sobrescribir DATABASE_URL
 database_url = os.getenv("DATABASE_URL")
 if database_url:
     config.set_main_option("sqlalchemy.url", database_url)
 
+# 🔥 Logging
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+# 🔥 Importar Base y ENTIDADES
 from database import Base
-
-# Importar todas las entidades
-import entities.sede
-import entities.usuario
-import entities.cliente
-import entities.veterinario
-import entities.mascota
-import entities.vacuna
-import entities.cita_vacunacion
+from entities import *  # 👈 MUCHO MEJOR que importar uno por uno
 
 target_metadata = Base.metadata
 
 
+
+# =========================
+# OFFLINE
+# =========================
 def run_migrations_offline() -> None:
     url = config.get_main_option("sqlalchemy.url")
+
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
+        compare_type=True,  # 🔥 detecta cambios de tipos
         dialect_opts={"paramstyle": "named"},
     )
+
     with context.begin_transaction():
         context.run_migrations()
-
 
 def run_migrations_online() -> None:
     connectable = engine_from_config(
@@ -47,11 +50,16 @@ def run_migrations_online() -> None:
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
+
     with connectable.connect() as connection:
-        context.configure(connection=connection, target_metadata=target_metadata)
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+            compare_type=True,  # 🔥 IMPORTANTE
+        )
+
         with context.begin_transaction():
             context.run_migrations()
-
 
 if context.is_offline_mode():
     run_migrations_offline()

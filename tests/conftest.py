@@ -1,9 +1,29 @@
-import os
-from dotenv import load_dotenv
+# tests/conftest.py
+import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from database import Base, get_db
+from main import app
 
-# Cargar variables de entorno de prueba
-load_dotenv()
+SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
+engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Asegurar que hay una DATABASE_URL para tests
-if not os.getenv("DATABASE_URL"):
-    os.environ["DATABASE_URL"] = "sqlite:///./test.db"
+Base.metadata.create_all(bind=engine)
+
+@pytest.fixture
+def db():
+    connection = engine.connect()
+    transaction = connection.begin()
+    db = TestingSessionLocal(bind=connection)
+    try:
+        yield db
+    finally:
+        transaction.rollback()
+        connection.close()
+
+@pytest.fixture
+def client():
+    """Create TestClient for FastAPI app"""
+    return TestClient(app)
