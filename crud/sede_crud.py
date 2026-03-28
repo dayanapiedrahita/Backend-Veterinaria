@@ -4,6 +4,7 @@ from schemas.sede_schema import SedeCreate, SedeUpdate
 from core.exceptions import NotFoundException
 
 
+
 def get_sedes(db: Session):
     return db.query(Sede).all()
 
@@ -15,6 +16,7 @@ def get_sede(db: Session, sede_id: int):
         raise NotFoundException("Sede no encontrada")
 
     return sede
+
 
 
 def create_sede(db: Session, data: SedeCreate):

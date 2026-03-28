@@ -5,6 +5,7 @@ from schemas.mascota_schema import MascotaCreate
 from core.exceptions import NotFoundException
 
 
+
 def get_mascotas(db: Session):
     return db.query(Mascota).all()
 
@@ -16,6 +17,7 @@ def get_mascota(db: Session, mascota_id: int):
         raise NotFoundException("Mascota no encontrada")
 
     return mascota
+
 
 
 def create_mascota(db: Session, data: MascotaCreate):

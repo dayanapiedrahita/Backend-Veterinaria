@@ -13,12 +13,14 @@ from crud.usuario_crud import (
 
 router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
 
+
 @router.post("/registro/cliente")
 def registrar_cliente(data: ClienteRegistro, db: Session = Depends(get_db)):
     try:
         return register_cliente(db, data)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.post("/registro/veterinario")
 def registrar_veterinario(data: VeterinarioRegistro, db: Session = Depends(get_db)):
@@ -27,7 +29,9 @@ def registrar_veterinario(data: VeterinarioRegistro, db: Session = Depends(get_d
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 # NOTE: login now handled in autenticar_endpoint
+
 
 @router.get("/{usuario_id}", response_model=UsuarioResponse)
 def obtener_usuario(usuario_id: int, db: Session = Depends(get_db)):

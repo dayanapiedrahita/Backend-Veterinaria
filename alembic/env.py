@@ -26,6 +26,7 @@ from entities import *  # 👈 MUCHO MEJOR que importar uno por uno
 target_metadata = Base.metadata
 
 
+
 # =========================
 # OFFLINE
 # =========================
@@ -43,10 +44,6 @@ def run_migrations_offline() -> None:
     with context.begin_transaction():
         context.run_migrations()
 
-
-# =========================
-# ONLINE
-# =========================
 def run_migrations_online() -> None:
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
@@ -64,10 +61,6 @@ def run_migrations_online() -> None:
         with context.begin_transaction():
             context.run_migrations()
 
-
-# =========================
-# EJECUCIÓN
-# =========================
 if context.is_offline_mode():
     run_migrations_offline()
 else:

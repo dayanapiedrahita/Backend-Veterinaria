@@ -3,6 +3,7 @@ from entities.cita_vacunacion import CitaVacunacion
 from schemas.cita_vacunacion_schema import CitaVacunacionCreate
 from core.exceptions import NotFoundException
 
+
 def get_citas_vacunacion(db: Session):
     return db.query(CitaVacunacion).all()
 
@@ -14,6 +15,7 @@ def get_cita_vacunacion(db: Session, cita_id: int):
         raise NotFoundException("Cita de vacunación no encontrada")
     
     return cita
+
 
 
 def create_cita_vacunacion(db: Session, data: CitaVacunacionCreate):

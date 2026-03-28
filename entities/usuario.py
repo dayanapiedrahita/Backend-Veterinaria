@@ -3,7 +3,6 @@ from sqlalchemy.orm import relationship
 from database import Base
 
 
-
 class Usuario(Base):
     __tablename__ = "usuario"
 
@@ -16,6 +15,3 @@ class Usuario(Base):
 
     cliente = relationship("Cliente", back_populates="usuario", uselist=False)
     veterinario = relationship("Veterinario", back_populates="usuario", uselist=False)
-
-
-

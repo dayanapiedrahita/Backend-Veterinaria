@@ -3,6 +3,7 @@ from entities.veterinario import Veterinario
 from core.exceptions import NotFoundException
 
 
+
 def get_veterinarios(db: Session):
     return db.query(Veterinario).all()
 
@@ -14,6 +15,7 @@ def get_veterinario(db: Session, veterinario_id: int):
         raise NotFoundException("Veterinario no encontrado")
 
     return veterinario
+
 
 
 def update_veterinario(

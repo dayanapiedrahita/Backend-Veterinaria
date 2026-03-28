@@ -3,6 +3,7 @@ from entities.cliente import Cliente
 from core.exceptions import NotFoundException
 
 
+
 def get_clientes(db: Session):
     return db.query(Cliente).all()
 

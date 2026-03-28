@@ -13,5 +13,5 @@ __all__ = [
     "veterinario_router",
     "mascota_router",
     "vacuna_router",
-    "cita_vacunacion_router"
+    "cita_vacunacion_router",
 ]

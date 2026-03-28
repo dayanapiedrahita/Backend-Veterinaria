@@ -7,9 +7,11 @@ from entities.sede import Sede
 
 router = APIRouter(prefix="/sedes", tags=["Sedes"])
 
+
 @router.get("/", response_model=list[SedeResponse])
 def listar_sedes(db: Session = Depends(get_db)):
     return get_sedes(db)
+
 
 @router.get("/{sede_id}", response_model=SedeResponse)
 def obtener_sede(sede_id: int, db: Session = Depends(get_db)):
@@ -18,9 +20,11 @@ def obtener_sede(sede_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Sede no encontrada")
     return sede
 
+
 @router.post("/", response_model=SedeResponse)
 def crear_sede(sede: SedeCreate, db: Session = Depends(get_db)):
     return create_sede(db, sede)
+
 
 @router.put("/{sede_id}", response_model=SedeResponse)
 def actualizar_sede(sede_id: int, sede: SedeUpdate, db: Session = Depends(get_db)):
@@ -28,6 +32,7 @@ def actualizar_sede(sede_id: int, sede: SedeUpdate, db: Session = Depends(get_db
     if not updated:
         raise HTTPException(status_code=404, detail="Sede no encontrada")
     return updated
+
 
 @router.delete("/{sede_id}", response_model=SedeResponse)
 def eliminar_sede(sede_id: int, db: Session = Depends(get_db)):

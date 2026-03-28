@@ -8,7 +8,7 @@ from .usuario_crud import (
     login_usuario,
     create_usuario,
     update_usuario,
-    delete_usuario
+    delete_usuario,
 )
 
 # CLIENTE
@@ -24,7 +24,7 @@ from .veterinario_crud import (
     get_veterinarios,
     get_veterinario,
     update_veterinario,
-    delete_veterinario
+    delete_veterinario,
 )
 
 # SEDE
@@ -60,7 +60,7 @@ from .cita_vacunacion_crud import (
     get_cita_vacunacion,
     create_cita_vacunacion,
     update_cita_vacunacion,
-    delete_cita_vacunacion
+    delete_cita_vacunacion,
 )
 
 __all__ = [
@@ -115,3 +115,4 @@ __all__ = [
     "update_cita_vacunacion",
     "delete_cita_vacunacion",
 ]
+

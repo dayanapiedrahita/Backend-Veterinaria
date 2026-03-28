@@ -4,6 +4,7 @@ from schemas.vacuna_schema import VacunaCreate
 from core.exceptions import NotFoundException
 
 
+
 def get_vacunas(db: Session):
     return db.query(Vacuna).all()
 
@@ -15,6 +16,7 @@ def get_vacuna(db: Session, vacuna_id: int):
         raise NotFoundException("Vacuna no encontrada")
 
     return vacuna
+
 
 
 def create_vacuna(db: Session, data: VacunaCreate):
