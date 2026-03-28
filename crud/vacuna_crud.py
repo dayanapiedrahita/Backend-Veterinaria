@@ -4,6 +4,7 @@ from schemas.vacuna_schema import VacunaCreate
 from core.exceptions import NotFoundException
 
 
+
 def get_vacunas(db: Session):
     return db.query(Vacuna).all()
 
@@ -15,6 +16,7 @@ def get_vacuna(db: Session, vacuna_id: int):
         raise NotFoundException("Vacuna no encontrada")
 
     return vacuna
+
 
 
 def create_vacuna(db: Session, data: VacunaCreate):
@@ -33,7 +35,11 @@ def update_vacuna(
     nombre: str | None = None,
     fabricante: str | None = None,
     descripcion: str | None = None,
+ Feat--Pipeline
     dosis_requeridas: int | None = None
+
+    dosis_requeridas: int | None = None,
+ dev
 ):
     db_vacuna = db.query(Vacuna).filter(Vacuna.id == vacuna_id).first()
 
@@ -60,6 +66,7 @@ def update_vacuna(
 
 def delete_vacuna(db: Session, vacuna_id: int):
     db_vacuna = db.query(Vacuna).filter(Vacuna.id == vacuna_id).first()
+ Feat--Pipeline
 
     if not db_vacuna:
         raise NotFoundException("Vacuna no encontrada")
@@ -68,3 +75,9 @@ def delete_vacuna(db: Session, vacuna_id: int):
     db.commit()
 
     return {"message": "Vacuna eliminada correctamente"}
+
+    if db_vacuna:
+        db.delete(db_vacuna)
+        db.commit()
+    return db_vacuna
+ dev

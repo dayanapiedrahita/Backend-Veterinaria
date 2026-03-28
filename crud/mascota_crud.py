@@ -5,6 +5,7 @@ from schemas.mascota_schema import MascotaCreate
 from core.exceptions import NotFoundException
 
 
+
 def get_mascotas(db: Session):
     return db.query(Mascota).all()
 
@@ -18,8 +19,9 @@ def get_mascota(db: Session, mascota_id: int):
     return mascota
 
 
+
 def create_mascota(db: Session, data: MascotaCreate):
-    payload = data.dict()
+ Feat--Pipeline
 
     cliente_id = payload.get('id_cliente')
     if cliente_id is not None:
@@ -30,6 +32,17 @@ def create_mascota(db: Session, data: MascotaCreate):
     if 'id_cliente' in payload:
         payload['cliente_id'] = payload.pop('id_cliente')
 
+
+    # ensure cliente exists
+    cliente_id = payload.get("id_cliente")
+    if cliente_id is not None:
+        existing = db.query(Cliente).filter(Cliente.id == cliente_id).first()
+        if not existing:
+            raise ValueError(f"Cliente con id={cliente_id} no existe")
+    # map schema field id_cliente -> entidad cliente_id
+    if "id_cliente" in payload:
+        payload["cliente_id"] = payload.pop("id_cliente")
+ dev
     db_mascota = Mascota(**payload)
 
     db.add(db_mascota)
@@ -45,7 +58,11 @@ def update_mascota(
     nombre: str | None = None,
     especie: str | None = None,
     raza: str | None = None,
+ Feat--Pipeline
     fecha_nacimiento=None
+
+    fecha_nacimiento=None,
+ dev
 ):
     db_mascota = db.query(Mascota).filter(Mascota.id == mascota_id).first()
 
@@ -72,6 +89,7 @@ def update_mascota(
 
 def delete_mascota(db: Session, mascota_id: int):
     db_mascota = db.query(Mascota).filter(Mascota.id == mascota_id).first()
+ Feat--Pipeline
 
     if not db_mascota:
         raise NotFoundException("Mascota no encontrada")
@@ -80,3 +98,9 @@ def delete_mascota(db: Session, mascota_id: int):
     db.commit()
 
     return {"message": "Mascota eliminada correctamente"}
+
+    if db_mascota:
+        db.delete(db_mascota)
+        db.commit()
+    return db_mascota
+ dev

@@ -1,4 +1,34 @@
 from fastapi import FastAPI
+ Feat--Pipeline
+
+from endpoints import (
+    sede_endpoint,
+    usuario_endpoint,
+    cliente_endpoint,
+    veterinario_endpoint,
+    mascota_endpoint,
+    vacuna_endpoint,
+    cita_vacunacion_endpoint,
+)
+from database import Base, engine
+from entities import *
+
+app = FastAPI()
+
+Base.metadata.create_all(bind=engine)
+
+app.include_router(sede_endpoint.router)
+app.include_router(usuario_endpoint.router)
+app.include_router(cliente_endpoint.router)
+app.include_router(veterinario_endpoint.router)
+app.include_router(mascota_endpoint.router)
+app.include_router(vacuna_endpoint.router)
+app.include_router(cita_vacunacion_endpoint.router)
+import uvicorn
+import os
+
+from fastapi import FastAPI
+ dev
 from fastapi.middleware.cors import CORSMiddleware
 
 from endpoints import (
@@ -12,11 +42,14 @@ from endpoints import (
     autenticar_endpoint,
 )
 
+ Feat--Pipeline
 from core.handlers import register_exception_handlers
 
 import uvicorn
 import os
 
+
+ dev
 app = FastAPI(
     title="Sistema de Gestión de Veterinaria",
     description="API REST para la veterinaria",
@@ -37,7 +70,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+ Feat--Pipeline
 # ROOT
+
+
+def _init_db():
+    """Initialize database tables on startup"""
+    print("Creando/actualizando tablas de la base de datos...")
+    create_tables()
+    print("API lista - documentación disponible en http://localhost:8000/docs")
+
+
+_init_db()
+
+
+ dev
 @app.get("/", tags=["raíz"])
 async def root():
     return {
@@ -67,4 +114,8 @@ def main():
 
 
 if __name__ == "__main__":
+ Feat--Pipeline
     main()
+
+    main()
+ dev

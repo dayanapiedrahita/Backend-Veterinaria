@@ -25,10 +25,11 @@ from entities import *  # 👈 MUCHO MEJOR que importar uno por uno
 
 target_metadata = Base.metadata
 
-
-# =========================
+ Feat--Pipeline
+# 
 # OFFLINE
-# =========================
+# 
+ dev
 def run_migrations_offline() -> None:
     url = config.get_main_option("sqlalchemy.url")
 
@@ -44,9 +45,12 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
-# =========================
+ Feat--Pipeline
+
 # ONLINE
-# =========================
+#
+
+dev
 def run_migrations_online() -> None:
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
@@ -65,9 +69,12 @@ def run_migrations_online() -> None:
             context.run_migrations()
 
 
-# =========================
+ Feat--Pipeline
+#
 # EJECUCIÓN
-# =========================
+# 
+
+ dev
 if context.is_offline_mode():
     run_migrations_offline()
 else:

@@ -6,6 +6,7 @@ from schemas.usuario_schema import ClienteRegistro, VeterinarioRegistro
 from core.exceptions import NotFoundException, ConflictException
 
 
+
 def get_usuarios(db: Session):
     return db.query(Usuario).all()
 
@@ -19,6 +20,7 @@ def get_usuario_by_id(db: Session, user_id: int):
     return usuario
 
 
+
 def get_usuario_by_email(db: Session, email: str):
     usuario = db.query(Usuario).filter(Usuario.email == email).first()
 
@@ -28,21 +30,29 @@ def get_usuario_by_email(db: Session, email: str):
     return usuario
 
 
+
 def contar_usuarios(db: Session) -> int:
     return db.query(Usuario).count()
 
 
+ Feat--Pipeline
 def create_usuario(db: Session, email: str, rol: str, cliente_id: int | None = None, veterinario_id: int | None = None):
     
     existing = db.query(Usuario).filter(Usuario.email == email).first()
     if existing:
         raise ConflictException("El email ya está registrado")
 
+
+def create_usuario(
+    db: Session,
+    email: str,
+    rol: str,
+    cliente_id: int | None = None,
+    veterinario_id: int | None = None,
+):
+dev
     usuario = Usuario(
-        email=email,
-        rol=rol,
-        cliente_id=cliente_id,
-        veterinario_id=veterinario_id
+        email=email, rol=rol, cliente_id=cliente_id, veterinario_id=veterinario_id
     )
 
     db.add(usuario)
@@ -52,7 +62,13 @@ def create_usuario(db: Session, email: str, rol: str, cliente_id: int | None = N
     return usuario
 
 
+ Feat--Pipeline
 def update_usuario(db: Session, user_id: int, email: str | None = None, rol: str | None = None):
+
+def update_usuario(
+    db: Session, user_id: int, email: str | None = None, rol: str | None = None
+):
+ dev
     db_usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
 
     if not db_usuario:
@@ -87,6 +103,7 @@ def delete_usuario(db: Session, user_id: int):
     return {"message": "Usuario eliminado correctamente"}
 
 
+
 def login_usuario(db: Session, email: str):
     usuario = db.query(Usuario).filter(Usuario.email == email).first()
 
@@ -96,6 +113,7 @@ def login_usuario(db: Session, email: str):
     return usuario
 
 
+
 def register_cliente(db: Session, data: ClienteRegistro):
     existing_user = db.query(Usuario).filter(Usuario.email == data.email).first()
 
@@ -103,13 +121,12 @@ def register_cliente(db: Session, data: ClienteRegistro):
         raise ConflictException("El email ya está registrado")
 
     cliente = Cliente(
-        nombre=data.nombre,
-        telefono=data.telefono,
-        direccion=data.direccion
+        nombre=data.nombre, telefono=data.telefono, direccion=data.direccion
     )
 
     db.add(cliente)
     db.flush()
+ Feat--Pipeline
 
     usuario = Usuario(
         email=data.email,
@@ -117,6 +134,9 @@ def register_cliente(db: Session, data: ClienteRegistro):
         cliente_id=cliente.id
     )
 
+
+    usuario = Usuario(email=data.email, rol="cliente", cliente_id=cliente.id)
+ dev
     db.add(usuario)
     db.commit()
     db.refresh(cliente)
@@ -131,22 +151,22 @@ def register_veterinario(db: Session, data: VeterinarioRegistro):
         raise ConflictException("El email ya está registrado")
 
     veterinario = Veterinario(
-        nombre=data.nombre,
-        especialidad=data.especialidad,
-        sede_id=data.id_sede
+        nombre=data.nombre, especialidad=data.especialidad, sede_id=data.id_sede
     )
 
     db.add(veterinario)
     db.flush()
 
     usuario = Usuario(
-        email=data.email,
-        rol="veterinario",
-        veterinario_id=veterinario.id
+        email=data.email, rol="veterinario", veterinario_id=veterinario.id
     )
 
     db.add(usuario)
     db.commit()
     db.refresh(veterinario)
+Feat--Pipeline
 
     return veterinario
+
+    return veterinario
+ dev

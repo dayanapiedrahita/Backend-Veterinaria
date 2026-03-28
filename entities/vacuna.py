@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 from database import Base
 
+
 class Vacuna(Base):
     __tablename__ = "vacuna"
 
