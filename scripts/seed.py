@@ -1,68 +1,144 @@
+#!/usr/bin/env python
+"""Seeder script to populate database with initial data."""
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
 from database import SessionLocal
+from entities.sede import Sede
+from entities.vacuna import Vacuna
 from entities.usuario import Usuario
 from entities.cliente import Cliente
 from entities.veterinario import Veterinario
-from entities.sede import Sede
+from entities.mascota import Mascota
 
 
 def seed():
+    """Populate database with initial data if not already populated."""
     db = SessionLocal()
-
-    # SEDE
-    sede = db.query(Sede).filter_by(nombre="Principal").first()
-    if not sede:
-        sede = Sede(nombre="Principal", direccion="Centro")
-        db.add(sede)
+    
+    try:
+        print("🌱 Iniciando seeder...")
+        
+        # Check if data already exists
+        if db.query(Sede).first() is not None:
+            print("✓ Base de datos ya contiene datos. Saltando seeder.")
+            return
+        
+        # Create Sedes
+        print("📍 Creando sedes...")
+        sedes = [
+            Sede(nombre="Sede Centro", direccion="Calle 1 #123", telefono="3001234567"),
+            Sede(nombre="Sede Norte", direccion="Carrera 5 #456", telefono="3009876543"),
+            Sede(nombre="Sede Sur", direccion="Avenida 10 #789", telefono="3005555555"),
+        ]
+        db.add_all(sedes)
         db.commit()
-        db.refresh(sede)
-
-    # CLIENTE
-    cliente = db.query(Cliente).filter_by(nombre="Cliente Demo").first()
-    if not cliente:
-        cliente = Cliente(
-            nombre="Cliente Demo",
-            telefono="123456789",
-            direccion="Calle 1"
-        )
-        db.add(cliente)
+        print(f"✓ {len(sedes)} sedes creadas")
+        
+        # Create Vacunas
+        print("💉 Creando vacunas...")
+        vacunas = [
+            Vacuna(nombre="Rabia", descripcion="Protección contra rabia", presentacion="Inyectable"),
+            Vacuna(nombre="Parvovirus", descripcion="Protección contra parvovirus canino", presentacion="Inyectable"),
+            Vacuna(nombre="Moquillo", descripcion="Protección contra moquillo", presentacion="Inyectable"),
+            Vacuna(nombre="Leucemia (Gatos)", descripcion="Protección contra leucemia felina", presentacion="Inyectable"),
+            Vacuna(nombre="Rinotraqueitis", descripcion="Protección contra rinotraqueitis", presentacion="Inyectable"),
+        ]
+        db.add_all(vacunas)
         db.commit()
-        db.refresh(cliente)
-
-    # USUARIO CLIENTE
-    usuario_cliente = db.query(Usuario).filter_by(email="cliente@test.com").first()
-    if not usuario_cliente:
-        usuario_cliente = Usuario(
-            email="cliente@test.com",
-            rol="cliente",
-            cliente_id=cliente.id
-        )
-        db.add(usuario_cliente)
+        print(f"✓ {len(vacunas)} vacunas creadas")
+        
+        # Create Veterinarios
+        print("👨‍⚕️ Creando veterinarios...")
+        sede = db.query(Sede).first()
+        vet_data = [
+            ("dr.garcia@veterinaria.com", "Dr. García López"),
+            ("dr.martin@veterinaria.com", "Dr. Martín Pérez"),
+            ("dra.silva@veterinaria.com", "Dra. Silva Rodríguez"),
+        ]
+        
+        for email, nombre in vet_data:
+            vet_entity = Veterinario(
+                nombre=nombre,
+                especialidad="Clínica General",
+                id_sede=sede.id
+            )
+            db.add(vet_entity)
+            db.flush()
+            
+            usuario = Usuario(
+                email=email,
+                rol="veterinario",
+                veterinario_id=vet_entity.id
+            )
+            db.add(usuario)
+        
         db.commit()
-
-    # VETERINARIO
-    veterinario = db.query(Veterinario).filter_by(nombre="Vet Demo").first()
-    if not veterinario:
-        veterinario = Veterinario(
-            nombre="Vet Demo",
-            especialidad="General",
-            sede_id=sede.id
-        )
-        db.add(veterinario)
+        print(f"✓ 3 veterinarios creados")
+        
+        # Create Clientes
+        print("👥 Creando clientes...")
+        client_data = [
+            ("Juan García", "3101111111", "Calle Principal 100", "juan.garcia@email.com"),
+            ("María López", "3102222222", "Carrera Secundaria 200", "maria.lopez@email.com"),
+            ("Carlos Rodríguez", "3103333333", "Avenida Central 300", "carlos.rodriguez@email.com"),
+            ("Ana Martínez", "3104444444", "Calle Lateral 400", "ana.martinez@email.com"),
+        ]
+        
+        clientes = []
+        for nombre, telefono, direccion, email in client_data:
+            cliente = Cliente(
+                nombre=nombre,
+                telefono=telefono,
+                direccion=direccion
+            )
+            db.add(cliente)
+            db.flush()
+            
+            usuario = Usuario(
+                email=email,
+                rol="cliente",
+                cliente_id=cliente.id
+            )
+            db.add(usuario)
+            clientes.append(cliente)
+        
         db.commit()
-        db.refresh(veterinario)
-
-    # USUARIO VETERINARIO
-    usuario_vet = db.query(Usuario).filter_by(email="vet@test.com").first()
-    if not usuario_vet:
-        usuario_vet = Usuario(
-            email="vet@test.com",
-            rol="veterinario",
-            veterinario_id=veterinario.id
-        )
-        db.add(usuario_vet)
+        print(f"✓ {len(clientes)} clientes creados")
+        
+        # Create Mascotas
+        print("🐕 Creando mascotas...")
+        pet_data = [
+            ("Rex", "Perro", "Golden Retriever", 5, 0),
+            ("Mimi", "Gato", "Persa", 3, 1),
+            ("Buddy", "Perro", "Labrador", 2, 2),
+            ("Luna", "Gato", "Siamés", 1, 3),
+        ]
+        
+        for nombre, tipo, raza, edad, cliente_idx in pet_data:
+            mascota = Mascota(
+                nombre=nombre,
+                tipo=tipo,
+                raza=raza,
+                edad=edad,
+                id_cliente=clientes[cliente_idx].id
+            )
+            db.add(mascota)
+        
         db.commit()
-
-    db.close()
+        print(f"✓ {len(pet_data)} mascotas creadas")
+        
+        print("\n✅ Seeder completado exitosamente!")
+        
+    except Exception as e:
+        db.rollback()
+        print(f"❌ Error en seeder: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+    finally:
+        db.close()
 
 
 if __name__ == "__main__":
