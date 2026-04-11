@@ -4,6 +4,8 @@ from database import get_db
 
 from schemas.cliente_schema import ClienteUpdate, ClienteResponse
 from crud.cliente_crud import get_clientes, get_cliente, update_cliente, delete_cliente
+from core.dependencies import get_current_user
+from entities.usuario import Usuario
 
 router = APIRouter(prefix="/clientes", tags=["Clientes"])
 
@@ -26,7 +28,10 @@ def obtener_cliente(cliente_id: int, db: Session = Depends(get_db)):
 
 @router.put("/{cliente_id}", response_model=ClienteResponse)
 def actualizar_cliente(
-    cliente_id: int, data: ClienteUpdate, db: Session = Depends(get_db)
+    cliente_id: int,
+    data: ClienteUpdate,
+    current_user: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
 
     updated = update_cliente(db, cliente_id, data.nombre, data.telefono)
@@ -38,7 +43,11 @@ def actualizar_cliente(
 
 
 @router.delete("/{cliente_id}", response_model=ClienteResponse)
-def eliminar_cliente(cliente_id: int, db: Session = Depends(get_db)):
+def eliminar_cliente(
+    cliente_id: int,
+    current_user: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
 
     deleted = delete_cliente(db, cliente_id)
 
