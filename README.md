@@ -130,7 +130,34 @@ El servidor se ejecutará en `http://localhost:8000` por defecto. Puedes cambiar
 - **ReDoc**: `http://localhost:8000/redoc`
 - **Raíz**: `http://localhost:8000/` (muestra información general)
 
+## Video Demostración
+
+En este video se evidencia la ejecución del pipeline CI/CD y la creación de tablas/campos en la base de datos:
+
+**[Enlace al video - Agregar aquí]**
+
+En el video se muestra:
+- ✅ Ejecución del pipeline en GitHub Actions (rama dev)
+- ✅ Ejecución de migraciones con Alembic (`alembic upgrade head`)
+- ✅ Ejecución del seeder idempotente (`python scripts/seed.py`)
+- ✅ Tablas y datos creados en PostgreSQL
+
 ## Endpoints Principales
+
+### Protección de Endpoints
+
+**Endpoints Públicos (GET)** - No requieren autenticación:
+- `GET /sedes`, `GET /sedes/{id}`
+- `GET /usuarios/{id}`
+- `GET /clientes`, `GET /clientes/{id}`
+- `GET /veterinarios`, `GET /veterinarios/{id}`
+- `GET /mascotas`, `GET /mascotas/{id}`
+- `GET /vacunas`, `GET /vacunas/{id}`
+- `GET /citas_vacunacion`, `GET /citas_vacunacion/{id}`
+
+**Endpoints Protegidos (POST/PUT/DELETE)** - Requieren JWT token en header `Authorization: Bearer <token>`:
+- Crear/Actualizar/Eliminar: sedes, clientes, veterinarios, mascotas, vacunas, citas
+- Registrar: `/usuarios/registro/cliente`, `/usuarios/registro/veterinario`
 
 ### Autenticación (JWT)
 - `POST /autenticar/login`: Iniciar sesión con email y obtener JWT token
@@ -138,64 +165,17 @@ El servidor se ejecutará en `http://localhost:8000` por defecto. Puedes cambiar
   - Response: `{"token": "eyJ0eXAiOiJKV1QiLCJhbGc...", "usuario": {...}}`
   - Token válido por 30 minutos
 
-### Sedes
-- `GET /sedes`: Listar todas las sedes
-- `POST /sedes`: Crear nueva sede
-- `GET /sedes/{id}`: Obtener sede por ID
-- `PUT /sedes/{id}`: Actualizar sede
-- `DELETE /sedes/{id}`: Eliminar sede
-
-### Usuarios
-- `GET /usuarios/total`: Obtener número total de usuarios
-- `GET /usuarios/email/{email}`: Obtener usuario por email
-- `GET /usuarios/{id}`: Obtener usuario por ID
-- `POST /usuarios/registro/cliente`: Registrar nuevo cliente
-- `POST /usuarios/registro/veterinario`: Registrar nuevo veterinario
-
-### Clientes
-- `GET /clientes`: Listar clientes
-- `POST /clientes`: Crear cliente
-- `GET /clientes/{id}`: Obtener cliente
-- `PUT /clientes/{id}`: Actualizar cliente
-- `DELETE /clientes/{id}`: Eliminar cliente
-
-### Veterinarios
-- `GET /veterinarios`: Listar veterinarios
-- `POST /veterinarios`: Crear veterinario
-- `GET /veterinarios/{id}`: Obtener veterinario
-- `PUT /veterinarios/{id}`: Actualizar veterinario
-- `DELETE /veterinarios/{id}`: Eliminar veterinario
-
-### Mascotas
-- `GET /mascotas`: Listar mascotas
-- `POST /mascotas`: Crear mascota
-- `GET /mascotas/{id}`: Obtener mascota
-- `PUT /mascotas/{id}`: Actualizar mascota
-- `DELETE /mascotas/{id}`: Eliminar mascota
-
-### Vacunas
-- `GET /vacunas`: Listar vacunas
-- `POST /vacunas`: Crear vacuna
-- `GET /vacunas/{id}`: Obtener vacuna
-- `PUT /vacunas/{id}`: Actualizar vacuna
-- `DELETE /vacunas/{id}`: Eliminar vacuna
-
-### Citas de Vacunación
-- `GET /citas_vacunacion`: Listar citas
-- `POST /citas_vacunacion`: Crear cita
-- `GET /citas_vacunacion/{id}`: Obtener cita
-- `PUT /citas_vacunacion/{id}`: Actualizar cita
-- `DELETE /citas_vacunacion/{id}`: Eliminar cita
-
-## Autenticación JWT
-
-La API utiliza **JSON Web Tokens (JWT)** para autenticación segura.
+### Configuración JWT:
+- **Algoritmo**: HS256
+- **Expiración**: 30 minutos
+- **Header requerido**: `Authorization: Bearer <token>`
+- **Buena práctica**: SECRET_KEY se configura en variables de entorno
 
 ### Flujo de autenticación:
 1. Cliente envía POST a `/autenticar/login` con su email
-2. Servidor valida y genera un JWT token válido por 30 minutos
-3. Cliente incluye el token en header `Authorization: Bearer <token>`
-4. Servidor valida token en cada solicitud protegida
+2. Servidor valida email y genera JWT token válido por 30 minutos
+3. Cliente incluye el token en header para operaciones protegidas
+4. Servidor valida token en endpoints POST/PUT/DELETE; rechaza con 401 si es inválido o expirado
 
 ### Ejemplo de login:
 ```bash
@@ -204,11 +184,105 @@ curl -X POST "http://localhost:8000/autenticar/login" \
   -d '{"email": "juan.garcia@email.com"}'
 ```
 
-### Usando el token:
+### Usando el token en operaciones protegidas:
 ```bash
-curl -X GET "http://localhost:8000/usuarios/total" \
-  -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGc..."
+curl -X POST "http://localhost:8000/sedes" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGc..." \
+  -d '{"nombre": "Sede Este", "direccion": "Calle 50", "telefono": "3001111111"}'
 ```
+
+### Sedes
+- `GET /sedes`: Listar todas las sedes
+- `POST /sedes`: Crear nueva sede (⭐ Protegido)
+- `GET /sedes/{id}`: Obtener sede por ID
+- `PUT /sedes/{id}`: Actualizar sede (⭐ Protegido)
+- `DELETE /sedes/{id}`: Eliminar sede (⭐ Protegido)
+
+### Usuarios
+- `GET /usuarios/{id}`: Obtener usuario por ID
+- `POST /usuarios/registro/cliente`: Registrar nuevo cliente (⭐ Protegido)
+- `POST /usuarios/registro/veterinario`: Registrar nuevo veterinario (⭐ Protegido)
+
+### Clientes
+- `GET /clientes`: Listar clientes
+- `GET /clientes/{id}`: Obtener cliente
+- `PUT /clientes/{id}`: Actualizar cliente (⭐ Protegido)
+- `DELETE /clientes/{id}`: Eliminar cliente (⭐ Protegido)
+
+### Veterinarios
+- `GET /veterinarios`: Listar veterinarios
+- `GET /veterinarios/{id}`: Obtener veterinario
+- `PUT /veterinarios/{id}`: Actualizar veterinario (⭐ Protegido)
+- `DELETE /veterinarios/{id}`: Eliminar veterinario (⭐ Protegido)
+
+### Mascotas
+- `GET /mascotas`: Listar mascotas
+- `GET /mascotas/{id}`: Obtener mascota
+- `POST /mascotas`: Crear mascota (⭐ Protegido)
+- `PUT /mascotas/{id}`: Actualizar mascota (⭐ Protegido)
+- `DELETE /mascotas/{id}`: Eliminar mascota (⭐ Protegido)
+
+### Vacunas
+- `GET /vacunas`: Listar vacunas
+- `GET /vacunas/{id}`: Obtener vacuna
+- `POST /vacunas`: Crear vacuna (⭐ Protegido)
+- `PUT /vacunas/{id}`: Actualizar vacuna (⭐ Protegido)
+- `DELETE /vacunas/{id}`: Eliminar vacuna (⭐ Protegido)
+
+### Citas de Vacunación
+- `GET /citas_vacunacion`: Listar citas
+- `GET /citas_vacunacion/{id}`: Obtener cita
+- `POST /citas_vacunacion`: Crear cita (⭐ Protegido)
+- `PUT /citas_vacunacion/{id}`: Actualizar cita (⭐ Protegido)
+- `DELETE /citas_vacunacion/{id}`: Eliminar cita (⭐ Protegido)
+
+## CORS (Control de Acceso)
+
+La API está configurada con CORS (Cross-Origin Resource Sharing) para permitir el consumo desde frontend.
+
+### Política CORS actual (Desarrollo):
+```python
+allow_origins=["*"]  # Permite cualquier origen
+allow_methods=["*"]  # Permite cualquier método HTTP
+allow_headers=["*"]  # Permite cualquier header
+```
+
+### Para Producción:
+Se recomienda restringir a orígenes específicos:
+```python
+allow_origins=[
+    "http://localhost:3000",
+    "https://midominio.com",
+    "https://www.midominio.com"
+]
+allow_methods=["GET", "POST", "PUT", "DELETE"]
+allow_headers=["Content-Type", "Authorization"]
+```
+
+## Carpeta Core y Manejo de Errores
+
+La carpeta `core/` centraliza funcionalidades transversales de la aplicación:
+
+### Estructura:
+- **`exceptions.py`**: Excepciones personalizadas (NotFoundException, BadRequestException, ConflictException)
+- **`handlers.py`**: Manejadores globales de excepciones en FastAPI
+- **`security.py`**: Utilidades de seguridad (JWT, hashing de contraseñas)
+- **`dependencies.py`**: Dependencias reutilizables (validación de JWT)
+
+### Respuestas de error homogéneas:
+Todos los errores retornan formato consistente:
+```json
+{
+  "error": "Descripción del error"
+}
+```
+
+Códigos HTTP utilizados:
+- `404 Not Found`: Recurso no encontrado
+- `400 Bad Request`: Solicitud inválida
+- `409 Conflict`: Conflicto en los datos
+- `401 Unauthorized`: Token inválido o expirado
 
 ## Seeder de Base de Datos
 
@@ -261,10 +335,14 @@ python test_connection.py
 
 ## Notas Adicionales
 
-- El sistema incluye CORS habilitado para desarrollo.
-- La autenticación actual es básica y simula tokens; en producción, implementa JWT o similar.
-- Los esquemas de Pydantic validan automáticamente los datos de entrada y salida.
-- El proyecto está diseñado para ser extensible; puedes agregar nuevos endpoints o entidades siguiendo la estructura existente.
+- ✅ **Autenticación JWT real** implementada con tokens seguros, expiración y validación en endpoints protegidos
+- ✅ **Manejo centralizado de errores** mediante carpeta `core/` con excepciones personalizadas y handlers globales
+- ✅ **CORS configurado** para desarrollo (abierto); requiere restricción en producción
+- ✅ **Seeder idempotente** que evita duplicados en ejecuciones repetidas
+- ✅ **Migraciones con Alembic** para versionado de esquema
+- ✅ **Pipeline CI/CD**: Configurado en `.github/workflows/ci.yml` con integración a BD, linting, tests y seeder
+- Los esquemas de Pydantic validan automáticamente los datos de entrada y salida
+- El proyecto está diseñado para ser extensible; puedes agregar nuevos endpoints o entidades siguiendo la estructura existente
 
 ## Contribución
 

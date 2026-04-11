@@ -14,6 +14,8 @@ from crud.cita_vacunacion_crud import (
     delete_cita_vacunacion,
 )
 from entities.cita_vacunacion import CitaVacunacion
+from core.dependencies import get_current_user
+from entities.usuario import Usuario
 
 router = APIRouter(prefix="/citas_vacunacion", tags=["CitasVacunacion"])
 
@@ -32,13 +34,20 @@ def obtener_cita(cita_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/", response_model=CitaVacunacionResponse)
-def crear_cita(cita: CitaVacunacionCreate, db: Session = Depends(get_db)):
+def crear_cita(
+    cita: CitaVacunacionCreate,
+    current_user: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     return create_cita_vacunacion(db, cita)
 
 
 @router.put("/{cita_id}", response_model=CitaVacunacionResponse)
 def actualizar_cita(
-    cita_id: int, cita: CitaVacunacionUpdate, db: Session = Depends(get_db)
+    cita_id: int,
+    cita: CitaVacunacionUpdate,
+    current_user: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
     updated = update_cita_vacunacion(db, cita_id, cita)
     if not updated:
@@ -47,7 +56,11 @@ def actualizar_cita(
 
 
 @router.delete("/{cita_id}", response_model=CitaVacunacionResponse)
-def eliminar_cita(cita_id: int, db: Session = Depends(get_db)):
+def eliminar_cita(
+    cita_id: int,
+    current_user: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     deleted = delete_cita_vacunacion(db, cita_id)
     if not deleted:
         raise HTTPException(status_code=404, detail="Cita no encontrada")

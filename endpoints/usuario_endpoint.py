@@ -10,12 +10,18 @@ from crud.usuario_crud import (
     get_usuario_by_id,
     contar_usuarios,
 )
+from core.dependencies import get_current_user
+from entities.usuario import Usuario
 
 router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
 
 
 @router.post("/registro/cliente")
-def registrar_cliente(data: ClienteRegistro, db: Session = Depends(get_db)):
+def registrar_cliente(
+    data: ClienteRegistro,
+    current_user: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     try:
         return register_cliente(db, data)
     except ValueError as e:
@@ -23,7 +29,11 @@ def registrar_cliente(data: ClienteRegistro, db: Session = Depends(get_db)):
 
 
 @router.post("/registro/veterinario")
-def registrar_veterinario(data: VeterinarioRegistro, db: Session = Depends(get_db)):
+def registrar_veterinario(
+    data: VeterinarioRegistro,
+    current_user: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     try:
         return register_veterinario(db, data)
     except ValueError as e:
