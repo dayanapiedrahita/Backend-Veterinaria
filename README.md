@@ -156,7 +156,8 @@ Juan Felipe Ospina Agudelo
 
 Lincon Andres Palacios
 
----
+video de la segunda entrega :
+https://youtu.be/4biNLPlJvhY
 
 ## Licencia
 
