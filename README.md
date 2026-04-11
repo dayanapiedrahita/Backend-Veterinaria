@@ -132,8 +132,11 @@ El servidor se ejecutará en `http://localhost:8000` por defecto. Puedes cambiar
 
 ## Endpoints Principales
 
-### Autenticación
-- `POST /autenticar/login`: Iniciar sesión con email (devuelve token simulado)
+### Autenticación (JWT)
+- `POST /autenticar/login`: Iniciar sesión con email y obtener JWT token
+  - Request: `{"email": "usuario@email.com"}`
+  - Response: `{"token": "eyJ0eXAiOiJKV1QiLCJhbGc...", "usuario": {...}}`
+  - Token válido por 30 minutos
 
 ### Sedes
 - `GET /sedes`: Listar todas las sedes
@@ -183,6 +186,47 @@ El servidor se ejecutará en `http://localhost:8000` por defecto. Puedes cambiar
 - `GET /citas_vacunacion/{id}`: Obtener cita
 - `PUT /citas_vacunacion/{id}`: Actualizar cita
 - `DELETE /citas_vacunacion/{id}`: Eliminar cita
+
+## Autenticación JWT
+
+La API utiliza **JSON Web Tokens (JWT)** para autenticación segura.
+
+### Flujo de autenticación:
+1. Cliente envía POST a `/autenticar/login` con su email
+2. Servidor valida y genera un JWT token válido por 30 minutos
+3. Cliente incluye el token en header `Authorization: Bearer <token>`
+4. Servidor valida token en cada solicitud protegida
+
+### Ejemplo de login:
+```bash
+curl -X POST "http://localhost:8000/autenticar/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "juan.garcia@email.com"}'
+```
+
+### Usando el token:
+```bash
+curl -X GET "http://localhost:8000/usuarios/total" \
+  -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGc..."
+```
+
+## Seeder de Base de Datos
+
+El proyecto incluye un script seeder idempotente que crea datos iniciales de demostración.
+
+### Ejecutar seeder manualmente:
+```bash
+python scripts/seed.py
+```
+
+### Datos que crea:
+- 3 sedes de veterinaria
+- 5 vacunas disponibles
+- 3 veterinarios registrados
+- 4 clientes de prueba
+- 4 mascotas de ejemplo
+
+**Nota**: El seeder solo ejecuta si la BD está vacía (seguro contra ejecuciones repetidas).
 
 ## Base de Datos
 

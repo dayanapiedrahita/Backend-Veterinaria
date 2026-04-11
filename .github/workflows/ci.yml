@@ -25,6 +25,14 @@ jobs:
           pip install -r requirements.txt
           pip install flake8 black
 
+      - name: Setup Database (Migrations)
+        run: |
+          alembic upgrade head || true
+
+      - name: Seed Database
+        run: |
+          python scripts/seed.py || true
+
       - name: Lint (flake8)
         run: |
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics || true
