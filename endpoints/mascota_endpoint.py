@@ -13,7 +13,7 @@ from entities.mascota import Mascota
 from core.dependencies import get_current_user
 from entities.usuario import Usuario
 
-router = APIRouter(prefix="/mascotas", tags=["Mascotas"])
+router = APIRouter(tags=["Mascotas"])
 
 
 @router.get("/", response_model=list[MascotaResponse])

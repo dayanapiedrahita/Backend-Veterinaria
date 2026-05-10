@@ -13,7 +13,7 @@ from entities.vacuna import Vacuna
 from core.dependencies import get_current_user
 from entities.usuario import Usuario
 
-router = APIRouter(prefix="/vacunas", tags=["Vacunas"])
+router = APIRouter(tags=["Vacunas"])
 
 
 @router.get("/", response_model=list[VacunaResponse])

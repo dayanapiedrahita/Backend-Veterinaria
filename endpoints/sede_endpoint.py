@@ -7,7 +7,7 @@ from entities.sede import Sede
 from core.dependencies import get_current_user
 from entities.usuario import Usuario
 
-router = APIRouter(prefix="/sedes", tags=["Sedes"])
+router = APIRouter(tags=["Sedes"])
 
 
 @router.get("/", response_model=list[SedeResponse])

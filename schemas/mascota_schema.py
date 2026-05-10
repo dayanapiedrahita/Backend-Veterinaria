@@ -1,14 +1,13 @@
 from pydantic import BaseModel
-from datetime import date
 from typing import Optional
 
 
 class MascotaBase(BaseModel):
     nombre: str
-    especie: str
-    raza: str
-    fecha_nacimiento: date
-    id_cliente: int
+    edad: Optional[str] = None
+    genero_id: Optional[str] = None
+    raza_id: Optional[str] = None
+    usuario_id: Optional[int] = None
 
 
 class MascotaCreate(MascotaBase):
@@ -16,11 +15,11 @@ class MascotaCreate(MascotaBase):
 
 
 class MascotaUpdate(BaseModel):
-    nombre: Optional[str]
-    especie: Optional[str]
-    raza: Optional[str]
-    fecha_nacimiento: Optional[date]
-    id_cliente: Optional[int]
+    nombre: Optional[str] = None
+    edad: Optional[str] = None
+    genero_id: Optional[str] = None
+    raza_id: Optional[str] = None
+    usuario_id: Optional[int] = None
 
 
 class MascotaResponse(MascotaBase):

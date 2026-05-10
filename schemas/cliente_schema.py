@@ -16,5 +16,6 @@ class ClienteUpdate(BaseModel):
 
 class ClienteResponse(ClienteBase):
     id: int
+    email: Optional[str] = None
 
     model_config = {"from_attributes": True}

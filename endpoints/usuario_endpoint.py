@@ -8,12 +8,13 @@ from crud.usuario_crud import (
     register_cliente,
     register_veterinario,
     get_usuario_by_id,
+    get_usuarios,
     contar_usuarios,
 )
 from core.dependencies import get_current_user
 from entities.usuario import Usuario
 
-router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
+router = APIRouter()
 
 
 @router.post("/registro/cliente")
@@ -41,6 +42,16 @@ def registrar_veterinario(
 
 
 # NOTE: login now handled in autenticar_endpoint
+
+
+@router.get("/", response_model=list[UsuarioResponse])
+def listar_usuarios(skip: int = 0, limit: int = 50, db: Session = Depends(get_db)):
+    return get_usuarios(db)
+
+
+@router.get("/total")
+def obtener_total_usuarios(db: Session = Depends(get_db)):
+    return {"total": contar_usuarios(db)}
 
 
 @router.get("/{usuario_id}", response_model=UsuarioResponse)
