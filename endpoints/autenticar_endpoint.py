@@ -7,7 +7,7 @@ from crud.usuario_crud import login_usuario
 from schemas.usuario_schema import LoginSchema, LoginResponse
 from core.security import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 
-router = APIRouter(prefix="/autenticar", tags=["Autenticación"])
+router = APIRouter(tags=["Autenticación"])
 
 
 @router.post("/login", response_model=LoginResponse)

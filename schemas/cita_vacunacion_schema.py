@@ -6,9 +6,9 @@ from typing import Optional
 class CitaVacunacionBase(BaseModel):
     fecha: datetime
     estado: str
-    id_mascota: int
-    id_veterinario: int
-    id_vacuna: int
+    mascota_id: int
+    veterinario_id: int
+    vacuna_id: int
 
 
 class CitaVacunacionCreate(CitaVacunacionBase):
@@ -18,9 +18,9 @@ class CitaVacunacionCreate(CitaVacunacionBase):
 class CitaVacunacionUpdate(BaseModel):
     fecha: Optional[datetime] = None
     estado: Optional[str] = None
-    id_mascota: Optional[int] = None
-    id_veterinario: Optional[int] = None
-    id_vacuna: Optional[int] = None
+    mascota_id: Optional[int] = None
+    veterinario_id: Optional[int] = None
+    vacuna_id: Optional[int] = None
 
 
 class CitaVacunacionResponse(CitaVacunacionBase):

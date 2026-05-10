@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from entities.vacuna import Vacuna
-from schemas.vacuna_schema import VacunaCreate
+from schemas.vacuna_schema import VacunaCreate, VacunaUpdate
 from core.exceptions import NotFoundException
 
 
@@ -32,27 +32,15 @@ def create_vacuna(db: Session, data: VacunaCreate):
 def update_vacuna(
     db: Session,
     vacuna_id: int,
-    nombre: str | None = None,
-    fabricante: str | None = None,
-    descripcion: str | None = None,
-    dosis_requeridas: int | None = None
+    data: VacunaUpdate
 ):
     db_vacuna = db.query(Vacuna).filter(Vacuna.id == vacuna_id).first()
 
     if not db_vacuna:
         raise NotFoundException("Vacuna no encontrada")
 
-    if nombre is not None:
-        db_vacuna.nombre = nombre
-
-    if fabricante is not None:
-        db_vacuna.fabricante = fabricante
-
-    if descripcion is not None:
-        db_vacuna.descripcion = descripcion
-
-    if dosis_requeridas is not None:
-        db_vacuna.dosis_requeridas = dosis_requeridas
+    for key, value in data.model_dump(exclude_unset=True).items():
+        setattr(db_vacuna, key, value)
 
     db.commit()
     db.refresh(db_vacuna)

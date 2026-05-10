@@ -17,7 +17,7 @@ from entities.cita_vacunacion import CitaVacunacion
 from core.dependencies import get_current_user
 from entities.usuario import Usuario
 
-router = APIRouter(prefix="/citas_vacunacion", tags=["CitasVacunacion"])
+router = APIRouter(tags=["CitasVacunacion"])
 
 
 @router.get("/", response_model=list[CitaVacunacionResponse])

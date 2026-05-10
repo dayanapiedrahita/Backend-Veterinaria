@@ -13,7 +13,7 @@ from entities.mascota import Mascota
 from core.dependencies import get_current_user
 from entities.usuario import Usuario
 
-router = APIRouter(prefix="/mascotas", tags=["Mascotas"])
+router = APIRouter(tags=["Mascotas"])
 
 
 @router.get("/", response_model=list[MascotaResponse])
@@ -51,7 +51,7 @@ def actualizar_mascota(
     return updated
 
 
-@router.delete("/{mascota_id}", response_model=MascotaResponse)
+@router.delete("/{mascota_id}")
 def eliminar_mascota(
     mascota_id: int,
     current_user: Usuario = Depends(get_current_user),

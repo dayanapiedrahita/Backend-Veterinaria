@@ -7,7 +7,7 @@ from crud.cliente_crud import get_clientes, get_cliente, update_cliente, delete_
 from core.dependencies import get_current_user
 from entities.usuario import Usuario
 
-router = APIRouter(prefix="/clientes", tags=["Clientes"])
+router = APIRouter()
 
 
 @router.get("/", response_model=list[ClienteResponse])
@@ -34,12 +34,19 @@ def actualizar_cliente(
     db: Session = Depends(get_db)
 ):
 
-    updated = update_cliente(db, cliente_id, data.nombre, data.telefono)
+    updated = update_cliente(db, cliente_id, data)
 
     if not updated:
         raise HTTPException(status_code=404, detail="Cliente no encontrado")
 
     return updated
+
+
+@router.get("/total")
+def obtener_total_clientes(db: Session = Depends(get_db)):
+    from entities.cliente import Cliente
+    total = db.query(Cliente).count()
+    return {"total_clientes": total}
 
 
 @router.delete("/{cliente_id}", response_model=ClienteResponse)

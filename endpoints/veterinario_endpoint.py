@@ -12,7 +12,7 @@ from crud.veterinario_crud import (
 from core.dependencies import get_current_user
 from entities.usuario import Usuario
 
-router = APIRouter(prefix="/veterinarios", tags=["Veterinarios"])
+router = APIRouter(tags=["Veterinarios"])
 
 
 @router.get("/", response_model=list[VeterinarioResponse])
