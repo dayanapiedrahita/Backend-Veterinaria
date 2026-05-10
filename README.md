@@ -237,27 +237,106 @@ curl -X POST "http://localhost:8000/sedes" \
 - `PUT /citas_vacunacion/{id}`: Actualizar cita (⭐ Protegido)
 - `DELETE /citas_vacunacion/{id}`: Eliminar cita (⭐ Protegido)
 
-## CORS (Control de Acceso)
+## CORS (Cross-Origin Resource Sharing)
 
-La API está configurada con CORS (Cross-Origin Resource Sharing) para permitir el consumo desde frontend.
+La API está configurada con CORS para permitir el consumo desde aplicaciones frontend en diferentes orígenes. Esta es una configuración crítica de seguridad que debe adaptarse según el entorno.
 
-### Política CORS actual (Desarrollo):
+### Política CORS Actual (Desarrollo)
+
+**⚠️ IMPORTANTE**: El backend está actualmente configurado con CORS abierto a cualquier origen:
 ```python
-allow_origins=["*"]  # Permite cualquier origen
+allow_origins=["*"]  # ⚠️ Permite cualquier origen (SOLO DESARROLLO)
 allow_methods=["*"]  # Permite cualquier método HTTP
 allow_headers=["*"]  # Permite cualquier header
 ```
 
-### Para Producción:
-Se recomienda restringir a orígenes específicos:
+Esta configuración se encuentra en [main.py](main.py#L35-L40) y es **INSEGURA para producción**.
+
+### Configuración mediante Variables de Entorno
+
+Para controlar los orígenes permitidos, se recomienda usar una variable de entorno `ALLOWED_ORIGINS`.
+
+#### 1. Añade a tu archivo `.env`:
+
+**Para desarrollo** (permite localhost):
+```
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:4200,http://localhost:8080
+```
+
+**Para producción** (dominios específicos):
+```
+ALLOWED_ORIGINS=https://midominio.com,https://www.midominio.com,https://app.midominio.com
+```
+
+#### 2. Uso en `main.py`:
+
 ```python
-allow_origins=[
-    "http://localhost:3000",
-    "https://midominio.com",
-    "https://www.midominio.com"
-]
-allow_methods=["GET", "POST", "PUT", "DELETE"]
-allow_headers=["Content-Type", "Authorization"]
+import os
+from fastapi.middleware.cors import CORSMiddleware
+
+# Leer orígenes permitidos desde variable de entorno
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"],
+)
+```
+
+### Orígenes Recomendados por Entorno
+
+**Desarrollo**:
+```
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:4200,http://localhost:8080,http://127.0.0.1:3000
+```
+
+**Staging/Testing**:
+```
+ALLOWED_ORIGINS=https://staging.midominio.com,https://testing.midominio.com
+```
+
+**Producción**:
+```
+ALLOWED_ORIGINS=https://midominio.com,https://www.midominio.com
+```
+
+### Métodos HTTP Permitidos
+
+La API permite los siguientes métodos HTTP necesarios para operaciones CRUD:
+- `GET`: Obtener datos
+- `POST`: Crear datos
+- `PUT`: Actualizar datos
+- `DELETE`: Eliminar datos
+- `OPTIONS`: Preflight de navegador
+
+### Headers CORS Requeridos
+
+Los siguientes headers son permitidos para todas las peticiones:
+- `Content-Type`: Especifica el tipo de contenido (application/json)
+- `Authorization`: Para enviar el JWT token en formato `Bearer <token>`
+
+### Verificación de CORS
+
+Para verificar que CORS está correctamente configurado, prueba una petición desde tu frontend:
+
+```javascript
+// JavaScript/Fetch
+const response = await fetch('http://localhost:8000/sedes', {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+    }
+});
+```
+
+Si CORS está correctamente configurado, la petición será exitosa. Si no, verás un error en la consola del navegador:
+```
+Access to XMLHttpRequest at 'http://localhost:8000/sedes' 
+from origin 'http://localhost:3000' has been blocked by CORS policy
 ```
 
 ## Carpeta Core y Manejo de Errores
