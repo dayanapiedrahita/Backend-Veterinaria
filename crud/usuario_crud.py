@@ -47,19 +47,32 @@ def create_usuario(db: Session, email: str, rol: str, cliente_id: int | None = N
     return usuario
 
 
-def update_usuario(db: Session, user_id: int, email: str | None = None, rol: str | None = None):
+def update_usuario(
+    db: Session,
+    user_id: int,
+    email: str | None = None,
+    rol: str | None = None,
+    cliente_id: int | None = None,
+    veterinario_id: int | None = None,
+):
     db_usuario = db.query(Usuario).filter(Usuario.id == user_id).first()
     if not db_usuario:
         raise NotFoundException("Usuario no encontrado")
 
-    if email:
+    if email is not None:
         existing = db.query(Usuario).filter(Usuario.email == email).first()
         if existing and existing.id != user_id:
             raise ConflictException("El email ya está en uso")
         db_usuario.email = email
 
-    if rol:
+    if rol is not None:
         db_usuario.rol = rol
+
+    if cliente_id is not None:
+        db_usuario.cliente_id = cliente_id
+
+    if veterinario_id is not None:
+        db_usuario.veterinario_id = veterinario_id
 
     db.commit()
     db.refresh(db_usuario)

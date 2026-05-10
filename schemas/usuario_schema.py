@@ -5,6 +5,8 @@ from typing import Optional
 class UsuarioBase(BaseModel):
     email: str
     rol: str
+    cliente_id: int | None = None
+    veterinario_id: int | None = None
 
 
 class UsuarioCreate(UsuarioBase):
@@ -12,8 +14,10 @@ class UsuarioCreate(UsuarioBase):
 
 
 class UsuarioUpdate(BaseModel):
-    email: Optional[str]
-    rol: Optional[str]
+    email: Optional[str] = None
+    rol: Optional[str] = None
+    cliente_id: Optional[int] = None
+    veterinario_id: Optional[int] = None
 
 
 class UsuarioResponse(UsuarioBase):

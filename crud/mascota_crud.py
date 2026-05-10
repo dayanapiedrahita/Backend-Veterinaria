@@ -59,4 +59,4 @@ def delete_mascota(db: Session, mascota_id: int):
     db.delete(db_mascota)
     db.commit()
 
-    return {"message": "Mascota eliminada correctamente"}
+    return {"exito": True, "mensaje": "Mascota eliminada correctamente"}
