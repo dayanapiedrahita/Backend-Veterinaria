@@ -2,8 +2,15 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
 
-from schemas.usuario_schema import ClienteRegistro, VeterinarioRegistro, LoginSchema
-from schemas.usuario_schema import UsuarioResponse
+from entities.usuario import Usuario
+
+from schemas.usuario_schema import (
+    ClienteRegistro,
+    VeterinarioRegistro,
+    LoginSchema,
+    UsuarioResponse
+)
+
 from crud.usuario_crud import (
     register_cliente,
     register_veterinario,
@@ -30,7 +37,9 @@ def registrar_veterinario(data: VeterinarioRegistro, db: Session = Depends(get_d
         raise HTTPException(status_code=400, detail=str(e))
 
 
-# NOTE: login now handled in autenticar_endpoint
+@router.get("/", response_model=list[UsuarioResponse])
+def listar_usuarios(db: Session = Depends(get_db)):
+    return db.query(Usuario).all()
 
 
 @router.get("/{usuario_id}", response_model=UsuarioResponse)

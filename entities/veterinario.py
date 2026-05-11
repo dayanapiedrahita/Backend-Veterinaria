@@ -1,7 +1,3 @@
-import sys, os
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from database import Base
@@ -13,6 +9,7 @@ class Veterinario(Base):
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String, nullable=False)
     especialidad = Column(String)
+
     sede_id = Column(Integer, ForeignKey("sede.id"), nullable=False)
 
     sede = relationship("Sede", back_populates="veterinarios")

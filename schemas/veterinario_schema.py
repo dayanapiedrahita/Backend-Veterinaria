@@ -4,16 +4,14 @@ from typing import Optional
 
 class VeterinarioBase(BaseModel):
     nombre: str
-    telefono: str
-    especialidad: str
-    id_sede: int
+    especialidad: Optional[str] = None
+    sede_id: int
 
 
 class VeterinarioUpdate(BaseModel):
-    nombre: Optional[str]
-    telefono: Optional[str]
-    especialidad: Optional[str]
-    id_sede: Optional[int]
+    nombre: Optional[str] = None
+    especialidad: Optional[str] = None
+    sede_id: Optional[int] = None
 
 
 class VeterinarioResponse(VeterinarioBase):

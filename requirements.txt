@@ -6,7 +6,7 @@ SQLAlchemy==2.0.43
 typing_extensions==4.15.0
 python-dotenv==1.0.1
 fastapi==0.104.1
-starlette==0.32.0
+starlette==0.27.0
 uvicorn[standard]==0.24.0
 pydantic==2.8.2
 python-multipart==0.0.6
