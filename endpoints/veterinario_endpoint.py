@@ -9,8 +9,10 @@ from crud.veterinario_crud import (
     update_veterinario,
     delete_veterinario,
 )
+from core.dependencies import get_current_user
+from entities.usuario import Usuario
 
-router = APIRouter(prefix="/veterinarios", tags=["Veterinarios"])
+router = APIRouter(tags=["Veterinarios"])
 
 
 @router.get("/", response_model=list[VeterinarioResponse])
@@ -32,6 +34,10 @@ def obtener_veterinario(veterinario_id: int, db: Session = Depends(get_db)):
 def actualizar_veterinario(
     veterinario_id: int,
     data: VeterinarioUpdate,
+ Feat--Pipeline
+
+    current_user: Usuario = Depends(get_current_user),
+ dev
     db: Session = Depends(get_db)
 ):
     updated = update_veterinario(
@@ -49,7 +55,16 @@ def actualizar_veterinario(
 
 
 @router.delete("/{veterinario_id}", response_model=VeterinarioResponse)
+ Feat--Pipeline
 def eliminar_veterinario(veterinario_id: int, db: Session = Depends(get_db)):
+
+def eliminar_veterinario(
+    veterinario_id: int,
+    current_user: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+
+ dev
     deleted = delete_veterinario(db, veterinario_id)
 
     if not deleted:

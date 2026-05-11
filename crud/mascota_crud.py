@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 from entities.mascota import Mascota
-from entities.cliente import Cliente
-from schemas.mascota_schema import MascotaCreate
+from schemas.mascota_schema import MascotaCreate, MascotaUpdate
 from core.exceptions import NotFoundException
 
 
@@ -23,15 +22,6 @@ def get_mascota(db: Session, mascota_id: int):
 def create_mascota(db: Session, data: MascotaCreate):
     payload = data.model_dump()
 
-    cliente_id = payload.get('id_cliente')
-    if cliente_id is not None:
-        existing = db.query(Cliente).filter(Cliente.id == cliente_id).first()
-        if not existing:
-            raise NotFoundException(f"Cliente con id={cliente_id} no existe")
-
-    if 'id_cliente' in payload:
-        payload['cliente_id'] = payload.pop('id_cliente')
-
     db_mascota = Mascota(**payload)
 
     db.add(db_mascota)
@@ -44,27 +34,15 @@ def create_mascota(db: Session, data: MascotaCreate):
 def update_mascota(
     db: Session,
     mascota_id: int,
-    nombre: str | None = None,
-    especie: str | None = None,
-    raza: str | None = None,
-    fecha_nacimiento=None
+    data: MascotaUpdate
 ):
     db_mascota = db.query(Mascota).filter(Mascota.id == mascota_id).first()
 
     if not db_mascota:
         raise NotFoundException("Mascota no encontrada")
 
-    if nombre is not None:
-        db_mascota.nombre = nombre
-
-    if especie is not None:
-        db_mascota.especie = especie
-
-    if raza is not None:
-        db_mascota.raza = raza
-
-    if fecha_nacimiento is not None:
-        db_mascota.fecha_nacimiento = fecha_nacimiento
+    for key, value in data.model_dump(exclude_unset=True).items():
+        setattr(db_mascota, key, value)
 
     db.commit()
     db.refresh(db_mascota)
@@ -81,4 +59,4 @@ def delete_mascota(db: Session, mascota_id: int):
     db.delete(db_mascota)
     db.commit()
 
-    return {"message": "Mascota eliminada correctamente"}
+    return {"exito": True, "mensaje": "Mascota eliminada correctamente"}

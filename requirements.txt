@@ -1,16 +1,21 @@
 alembic==1.14.0
 annotated-types==0.7.0
 greenlet==3.2.4
-psycopg2-binary==2.9.10
+psycopg2-binary>=2.9.10
 SQLAlchemy==2.0.43
 typing_extensions==4.15.0
 python-dotenv==1.0.1
 fastapi==0.104.1
+Feat--Pipeline
 starlette==0.27.0
+
+ dev
 uvicorn[standard]==0.24.0
 pydantic==2.8.2
 python-multipart==0.0.6
 httpx==0.24.1
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
 black==26.1.0
 pip-audit==2.7.0
 pytest==7.4.4

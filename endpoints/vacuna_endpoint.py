@@ -10,8 +10,10 @@ from crud.vacuna_crud import (
     delete_vacuna,
 )
 from entities.vacuna import Vacuna
+from core.dependencies import get_current_user
+from entities.usuario import Usuario
 
-router = APIRouter(prefix="/vacunas", tags=["Vacunas"])
+router = APIRouter(tags=["Vacunas"])
 
 
 @router.get("/", response_model=list[VacunaResponse])
@@ -28,13 +30,20 @@ def obtener_vacuna(vacuna_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/", response_model=VacunaResponse)
-def crear_vacuna(vacuna: VacunaCreate, db: Session = Depends(get_db)):
+def crear_vacuna(
+    vacuna: VacunaCreate,
+    current_user: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     return create_vacuna(db, vacuna)
 
 
 @router.put("/{vacuna_id}", response_model=VacunaResponse)
 def actualizar_vacuna(
-    vacuna_id: int, vacuna: VacunaUpdate, db: Session = Depends(get_db)
+    vacuna_id: int,
+    vacuna: VacunaUpdate,
+    current_user: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
     updated = update_vacuna(db, vacuna_id, vacuna)
     if not updated:
@@ -43,7 +52,11 @@ def actualizar_vacuna(
 
 
 @router.delete("/{vacuna_id}", response_model=VacunaResponse)
-def eliminar_vacuna(vacuna_id: int, db: Session = Depends(get_db)):
+def eliminar_vacuna(
+    vacuna_id: int,
+    current_user: Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     deleted = delete_vacuna(db, vacuna_id)
     if not deleted:
         raise HTTPException(status_code=404, detail="Vacuna no encontrada")

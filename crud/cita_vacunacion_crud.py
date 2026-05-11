@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from entities.cita_vacunacion import CitaVacunacion
-from schemas.cita_vacunacion_schema import CitaVacunacionCreate
+from schemas.cita_vacunacion_schema import CitaVacunacionCreate, CitaVacunacionUpdate
 from core.exceptions import NotFoundException
 
 
@@ -19,15 +19,7 @@ def get_cita_vacunacion(db: Session, cita_id: int):
 
 
 def create_cita_vacunacion(db: Session, data: CitaVacunacionCreate):
-    payload = data.dict()
-
-    
-    if 'id_mascota' in payload:
-        payload['mascota_id'] = payload.pop('id_mascota')
-    if 'id_veterinario' in payload:
-        payload['veterinario_id'] = payload.pop('id_veterinario')
-    if 'id_vacuna' in payload:
-        payload['vacuna_id'] = payload.pop('id_vacuna')
+    payload = data.model_dump()
 
     db_cita = CitaVacunacion(**payload)
     db.add(db_cita)
@@ -37,29 +29,16 @@ def create_cita_vacunacion(db: Session, data: CitaVacunacionCreate):
     return db_cita
 
 
-def update_cita_vacunacion(db: Session, cita_id: int, data: CitaVacunacionCreate):
+def update_cita_vacunacion(db: Session, cita_id: int, data: CitaVacunacionUpdate):
     db_cita = db.query(CitaVacunacion).filter(CitaVacunacion.id == cita_id).first()
 
     if not db_cita:
         raise NotFoundException("Cita de vacunación no encontrada")
 
-    payload = data.dict()
+    update_data = data.model_dump(exclude_unset=True)
 
-    
-    if 'id_mascota' in payload and payload['id_mascota'] is not None:
-        setattr(db_cita, 'mascota_id', payload.pop('id_mascota'))
-
-    if 'id_veterinario' in payload and payload['id_veterinario'] is not None:
-        setattr(db_cita, 'veterinario_id', payload.pop('id_veterinario'))
-
-    if 'id_vacuna' in payload and payload['id_vacuna'] is not None:
-        setattr(db_cita, 'vacuna_id', payload.pop('id_vacuna'))
-
-    if 'fecha' in payload and payload['fecha'] is not None:
-        setattr(db_cita, 'fecha', payload.pop('fecha'))
-
-    if 'estado' in payload and payload['estado'] is not None:
-        setattr(db_cita, 'estado', payload['estado'])
+    for key, value in update_data.items():
+        setattr(db_cita, key, value)
 
     db.commit()
     db.refresh(db_cita)
