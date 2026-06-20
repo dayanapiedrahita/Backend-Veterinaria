@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
+
 from schemas.cita_vacunacion_schema import (
     CitaVacunacionCreate,
     CitaVacunacionUpdate,
     CitaVacunacionResponse,
 )
+
 from crud.cita_vacunacion_crud import (
     get_citas_vacunacion,
     get_cita_vacunacion,
@@ -13,11 +15,16 @@ from crud.cita_vacunacion_crud import (
     update_cita_vacunacion,
     delete_cita_vacunacion,
 )
+ Feat--Pipeline
+
+router = APIRouter(prefix="/citas", tags=["CitasVacunacion"])
+
 from entities.cita_vacunacion import CitaVacunacion
 from core.dependencies import get_current_user
 from entities.usuario import Usuario
 
 router = APIRouter(tags=["CitasVacunacion"])
+ dev
 
 
 @router.get("/", response_model=list[CitaVacunacionResponse])
@@ -28,8 +35,10 @@ def listar_citas(db: Session = Depends(get_db)):
 @router.get("/{cita_id}", response_model=CitaVacunacionResponse)
 def obtener_cita(cita_id: int, db: Session = Depends(get_db)):
     cita = get_cita_vacunacion(db, cita_id)
+
     if not cita:
         raise HTTPException(status_code=404, detail="Cita no encontrada")
+
     return cita
 
 
@@ -46,12 +55,17 @@ def crear_cita(
 def actualizar_cita(
     cita_id: int,
     cita: CitaVacunacionUpdate,
+ Feat--Pipeline
+
     current_user: Usuario = Depends(get_current_user),
+ dev
     db: Session = Depends(get_db)
 ):
     updated = update_cita_vacunacion(db, cita_id, cita)
+
     if not updated:
         raise HTTPException(status_code=404, detail="Cita no encontrada")
+
     return updated
 
 
@@ -62,6 +76,8 @@ def eliminar_cita(
     db: Session = Depends(get_db)
 ):
     deleted = delete_cita_vacunacion(db, cita_id)
+
     if not deleted:
         raise HTTPException(status_code=404, detail="Cita no encontrada")
+
     return deleted

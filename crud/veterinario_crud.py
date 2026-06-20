@@ -3,13 +3,14 @@ from entities.veterinario import Veterinario
 from core.exceptions import NotFoundException
 
 
-
 def get_veterinarios(db: Session):
     return db.query(Veterinario).all()
 
 
 def get_veterinario(db: Session, veterinario_id: int):
-    veterinario = db.query(Veterinario).filter(Veterinario.id == veterinario_id).first()
+    veterinario = db.query(Veterinario).filter(
+        Veterinario.id == veterinario_id
+    ).first()
 
     if not veterinario:
         raise NotFoundException("Veterinario no encontrado")
@@ -17,15 +18,16 @@ def get_veterinario(db: Session, veterinario_id: int):
     return veterinario
 
 
-
 def update_veterinario(
     db: Session,
     veterinario_id: int,
     nombre: str | None = None,
     especialidad: str | None = None,
-    id_sede: int | None = None
+    sede_id: int | None = None
 ):
-    db_veterinario = db.query(Veterinario).filter(Veterinario.id == veterinario_id).first()
+    db_veterinario = db.query(Veterinario).filter(
+        Veterinario.id == veterinario_id
+    ).first()
 
     if not db_veterinario:
         raise NotFoundException("Veterinario no encontrado")
@@ -36,8 +38,8 @@ def update_veterinario(
     if especialidad is not None:
         db_veterinario.especialidad = especialidad
 
-    if id_sede is not None:
-        db_veterinario.id_sede = id_sede
+    if sede_id is not None:
+        db_veterinario.sede_id = sede_id
 
     db.commit()
     db.refresh(db_veterinario)
@@ -46,7 +48,9 @@ def update_veterinario(
 
 
 def delete_veterinario(db: Session, veterinario_id: int):
-    db_veterinario = db.query(Veterinario).filter(Veterinario.id == veterinario_id).first()
+    db_veterinario = db.query(Veterinario).filter(
+        Veterinario.id == veterinario_id
+    ).first()
 
     if not db_veterinario:
         raise NotFoundException("Veterinario no encontrado")

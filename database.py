@@ -10,7 +10,7 @@ load_dotenv()
 # build connection string from environment variable or fallback
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "postgresql+psycopg2://neondb_owner:npg_LYUn7RhqV2sy@ep-weathered-queen-ai35cf7f-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
+    "postgresql://neondb_owner:npg_LYUn7RhqV2sy@ep-weathered-queen-ai35cf7f-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
 )
 
 engine = create_engine(DATABASE_URL, echo=True)

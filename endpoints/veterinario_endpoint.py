@@ -22,7 +22,6 @@ def listar_veterinarios(db: Session = Depends(get_db)):
 
 @router.get("/{veterinario_id}", response_model=VeterinarioResponse)
 def obtener_veterinario(veterinario_id: int, db: Session = Depends(get_db)):
-
     veterinario = get_veterinario(db, veterinario_id)
 
     if not veterinario:
@@ -35,12 +34,18 @@ def obtener_veterinario(veterinario_id: int, db: Session = Depends(get_db)):
 def actualizar_veterinario(
     veterinario_id: int,
     data: VeterinarioUpdate,
+ Feat--Pipeline
+
     current_user: Usuario = Depends(get_current_user),
+ dev
     db: Session = Depends(get_db)
 ):
-
     updated = update_veterinario(
-        db, veterinario_id, data.nombre, data.especialidad, data.sede_id
+        db,
+        veterinario_id,
+        data.nombre,
+        data.especialidad,
+        data.sede_id
     )
 
     if not updated:
@@ -50,12 +55,16 @@ def actualizar_veterinario(
 
 
 @router.delete("/{veterinario_id}", response_model=VeterinarioResponse)
+ Feat--Pipeline
+def eliminar_veterinario(veterinario_id: int, db: Session = Depends(get_db)):
+
 def eliminar_veterinario(
     veterinario_id: int,
     current_user: Usuario = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
 
+ dev
     deleted = delete_veterinario(db, veterinario_id)
 
     if not deleted:
